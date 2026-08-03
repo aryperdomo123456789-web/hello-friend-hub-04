@@ -90,7 +90,10 @@ export function MusclesTab({ muscles }: MusclesTabProps) {
                 <label htmlFor="auto-install" className="text-xs font-bold text-muted-foreground">instalar automaticamente ao salvar</label>
               </div>
             </div>
-            <Button className="bg-green-500 hover:bg-green-600 text-white font-bold h-9 px-6 rounded-lg text-xs">
+            <Button 
+              className="bg-green-500 hover:bg-green-600 text-white font-bold h-9 px-6 rounded-lg text-xs"
+              onClick={() => alert("Ao salvar com 'instalar automaticamente' marcado, o sistema executa via SSH o script de instalação que configura o Nginx otimizado e as regras de proxy no LB, tornando-o um Músculo ativo do sistema.")}
+            >
               Salvar LB
             </Button>
           </CardContent>
