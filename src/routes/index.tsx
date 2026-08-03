@@ -11,7 +11,6 @@ import {
   Activity, 
   ShieldCheck, 
   Plus, 
-  Globe, 
   Shield, 
   Monitor, 
   RefreshCw,
@@ -28,10 +27,13 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { useDashboardData } from "@/features/dashboard/hooks/use-dashboard-data";
 import { StatCard } from "@/features/dashboard/components/StatCard";
 import { LiveConnectionsTable } from "@/features/dashboard/components/live/LiveConnectionsTable";
+import { SourceList } from "@/features/dashboard/components/live/SourceList";
+import { MuscleList } from "@/features/dashboard/components/muscles/MuscleList";
 import { XuiConnectionConfig } from "@/features/dashboard/components/xui/XuiConnectionConfig";
 import { XuiOperations } from "@/features/dashboard/components/xui/XuiOperations";
 import { DomainsTab } from "@/features/dashboard/components/domains/DomainsTab";
 import { MusclesTab } from "@/features/dashboard/components/muscles/MusclesTab";
+
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -178,55 +180,30 @@ function Index() {
                       </Button>
                     </div>
                   </CardHeader>
-                  <CardContent className="p-0">
-                    <div className="divide-y divide-border/40">
-                      {sources.map((source) => (
-                        <div key={source.id} className="p-3 flex items-center justify-between hover:bg-accent/20 transition-colors">
-                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-                              <Globe className="w-4 h-4" />
-                            </div>
-                            <div>
-                              <div className="text-xs font-bold">{source.name}</div>
-                              <div className="text-[10px] text-muted-foreground font-mono">{source.ip}</div>
-                            </div>
-                          </div>
-                          <Badge variant="outline" className="text-[10px] font-bold text-green-500 border-green-500/20 bg-green-500/5">API OK</Badge>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
+                <CardContent className="p-0">
+                  <div className="divide-y divide-border/40">
+                    <SourceList sources={sources} />
+                  </div>
+                </CardContent>
+              </Card>
 
-                <Card className="border-border/50 bg-card/50">
-                  <CardHeader className="pb-3 border-b border-border/50">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-sm font-bold flex items-center gap-2">
-                        <Server className="w-4 h-4 text-primary" />
-                        Músculos (LB)
-                      </CardTitle>
-                      <Button variant="outline" size="icon" className="h-7 w-7 rounded-full">
-                        <Plus className="w-3.5 h-3.5" />
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="p-0">
-                    <div className="divide-y divide-border/40">
-                      {muscles.map((muscle) => (
-                        <div key={muscle.id} className="p-3 flex items-center justify-between hover:bg-accent/20 transition-colors">
-                          <div className="flex items-center gap-3">
-                            <div className={`w-2 h-2 rounded-full ${muscle.status === 'online' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.4)]' : 'bg-gray-400'}`} />
-                            <div>
-                              <div className="text-xs font-bold">{muscle.name}</div>
-                              <div className="text-[10px] text-muted-foreground font-mono">{muscle.ip}</div>
-                            </div>
-                          </div>
-                          <Badge variant="outline" className="text-[10px] font-bold">{muscle.status === 'online' ? 'Protegido' : 'Off'}</Badge>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
+              <Card className="border-border/50 bg-card/50">
+                <CardHeader className="pb-3 border-b border-border/50">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-sm font-bold flex items-center gap-2">
+                      <Server className="w-4 h-4 text-primary" />
+                      Músculos (LB)
+                    </CardTitle>
+                    <Button variant="outline" size="icon" className="h-7 w-7 rounded-full">
+                      <Plus className="w-3.5 h-3.5" />
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <MuscleList muscles={muscles} />
+                </CardContent>
+              </Card>
+
               </div>
             </div>
           </TabsContent>
