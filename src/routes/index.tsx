@@ -187,11 +187,12 @@ function Index() {
                       <Input placeholder="filtrar usuário ou IP" className="pl-9 h-9 bg-background/50 border-border/50" />
                     </div>
                     <div className="flex items-center gap-1 overflow-x-auto pb-1 md:pb-0">
-                      <Button variant="secondary" size="sm" className="h-8 rounded-full px-4 text-xs font-semibold">todas</Button>
-                      <Button variant="ghost" size="sm" className="h-8 rounded-full px-4 text-xs font-semibold hover:bg-accent/50">canais</Button>
-                      <Button variant="ghost" size="sm" className="h-8 rounded-full px-4 text-xs font-semibold hover:bg-accent/50">filmes</Button>
-                      <Button variant="ghost" size="sm" className="h-8 rounded-full px-4 text-xs font-semibold hover:bg-accent/50">séries</Button>
-                      <Button variant="ghost" size="sm" className="h-8 rounded-full px-4 text-xs font-semibold hover:bg-accent/50">direct</Button>
+                      <Button variant="secondary" size="sm" className="h-8 rounded-full px-4 text-xs font-semibold bg-primary/20 text-primary hover:bg-primary/30">todas</Button>
+                      <Button variant="ghost" size="sm" className="h-8 rounded-full px-4 text-xs font-semibold hover:bg-accent/50 text-muted-foreground">canais</Button>
+                      <Button variant="ghost" size="sm" className="h-8 rounded-full px-4 text-xs font-semibold hover:bg-accent/50 text-muted-foreground">filmes</Button>
+                      <Button variant="ghost" size="sm" className="h-8 rounded-full px-4 text-xs font-semibold hover:bg-accent/50 text-muted-foreground">séries</Button>
+                      <Button variant="ghost" size="sm" className="h-8 rounded-full px-4 text-xs font-semibold hover:bg-accent/50 text-muted-foreground">direct</Button>
+                      <Button variant="ghost" size="sm" className="h-8 rounded-full px-4 text-xs font-semibold hover:bg-accent/50 text-muted-foreground">só transmitindo</Button>
                     </div>
                   </div>
                   <LiveConnectionsTable connections={liveConnections} />
