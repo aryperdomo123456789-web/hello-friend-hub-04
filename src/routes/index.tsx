@@ -91,7 +91,7 @@ function Index() {
             <div>
               <h1 className="text-3xl font-bold tracking-tight">CDN Voods - Cérebro</h1>
               <p className="text-muted-foreground mt-1 text-sm md:text-base">
-                Sua ideia de uma CDN protegida é perfeita. O "Cérebro" centralizado em uma VPS de 2 vCPU e 6GB de RAM é ideal para gerenciar o controle de acesso e telemetria, enquanto os "Músculos" (LBs) distribuídos garantem a fluidez e protegem a origem do XUI de vazamentos.
+                Gerenciamento centralizado de origens e load balancers (músculos).
               </p>
             </div>
             <div className="md:hidden">
