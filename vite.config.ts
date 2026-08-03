@@ -18,6 +18,7 @@ export default defineConfig({
         "node:stream": "stream-browserify",
         "node:buffer": "buffer",
         "process": "process/browser",
+        "lru.min": "lru-cache",
       },
     },
     define: {
@@ -27,7 +28,7 @@ export default defineConfig({
     },
     ssr: {
       // Usamos noExternal para tudo relacionado a mysql e polyfills para garantir bundling consistente
-      noExternal: ['mysql2', 'sql-escaper', 'lru-cache', 'process', 'stream-browserify', 'buffer', 'util', '@supabase/supabase-js'],
+      noExternal: ['mysql2', 'sql-escaper', 'lru-cache', 'process', 'stream-browserify', 'buffer', 'util', '@supabase/supabase-js', 'lru-cache/min'],
     },
   },
 });

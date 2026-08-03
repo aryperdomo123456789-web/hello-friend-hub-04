@@ -1,5 +1,14 @@
 import mysql from 'mysql2/promise';
 
+// Mock de lru.min se necessário para compatibilidade com versões específicas do mysql2
+if (typeof globalThis !== 'undefined') {
+  (globalThis as any)['lru.min'] = (globalThis as any).LRUCache || {};
+  // Alguns ambientes podem procurar por 'lru-cache/min' ou apenas 'lru'
+  (globalThis as any)['lru-cache/min'] = (globalThis as any).LRUCache || {};
+}
+
+
+
 /**
  * Nota sobre compatibilidade Edge:
  * O mysql2 é marcado como external no vite.config.ts para permitir que o 
@@ -16,12 +25,17 @@ export async function getXuiDb(config: any) {
     };
   }
 
-  // Importação dinâmica para garantir que o lru-cache seja carregado no ambiente correto
+  // Tentativa de polyfill para o módulo lru.min/lru-cache
   try {
+    // Alguns drivers mysql2 tentam carregar lru-cache internamente
+    // Forçamos a disponibilidade se possível
     const lru = await import('lru-cache');
-    console.log("[System] lru-cache carregado com sucesso");
+    if (lru && (lru as any).default) {
+       (globalThis as any).LRUCache = (lru as any).default;
+    }
+    console.log("[System] lru-cache preparado");
   } catch (e) {
-    console.error("[System] Erro ao carregar lru-cache:", e);
+    console.warn("[System] lru-cache não carregado, o driver pode falhar se depender dele");
   }
 
   const host = config.ip || '38.190.176.170';
