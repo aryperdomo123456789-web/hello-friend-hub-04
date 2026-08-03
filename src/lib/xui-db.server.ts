@@ -1,5 +1,11 @@
 import mysql from 'mysql2/promise';
 
+// Mock de lru.min se necessário para compatibilidade com versões específicas do mysql2
+if (typeof globalThis !== 'undefined') {
+  (globalThis as any)['lru.min'] = (globalThis as any).LRUCache || {};
+}
+
+
 /**
  * Nota sobre compatibilidade Edge:
  * O mysql2 é marcado como external no vite.config.ts para permitir que o 
