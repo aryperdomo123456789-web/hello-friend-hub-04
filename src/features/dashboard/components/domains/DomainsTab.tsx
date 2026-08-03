@@ -1,10 +1,97 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Globe, Plus, RefreshCw, Copy, AlertTriangle } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Globe, Plus, RefreshCw, Copy, AlertTriangle, Shield, Check } from "lucide-react";
+import { useState } from "react";
+import { useDashboardData } from "../../hooks/use-dashboard-data";
+import { useServerFn } from "@tanstack/react-start";
+import { saveSourceConfig } from "@/lib/dashboard.functions";
+import { toast } from "sonner";
 
 export function DomainsTab() {
+  const { domains } = useDashboardData();
+  const updateSource = useServerFn(saveSourceConfig);
+  
+  const [sourceIp, setSourceIp] = useState("38.190.176.170");
+  const [sourcePort, setSourcePort] = useState("80");
+  const [isSaving, setIsSaving] = useState(false);
+
+  const handleSaveSource = async () => {
+    setIsSaving(true);
+    try {
+      await updateSource({ data: { ip: sourceIp, port: sourcePort, apiUrl: `http://${sourceIp}/fejvCHkR` } });
+      toast.success("Origem salva com sucesso!");
+    } catch (e) {
+      toast.error("Erro ao salvar origem.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
     <div className="space-y-8">
+      {/* 1. Origem do XUI Section */}
+      <Card className="border-border/50 bg-card/50 overflow-hidden">
+        <CardHeader className="border-b border-border/50 pb-4 bg-muted/20">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+              <Shield className="w-5 h-5" />
+            </div>
+            <div>
+              <CardTitle className="text-lg font-bold">1. Origem do XUI (interno — nunca sai para o público)</CardTitle>
+              <CardDescription>
+                Este painel protege um XUI. Cadastre a origem uma única vez; todos os domínios de proteção usam ela.
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="p-6 space-y-6">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-xs font-bold uppercase text-muted-foreground">Tipo de origem</label>
+              <div className="bg-background/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground flex items-center justify-between">
+                <span>A — o main do XUI é só IP (ex: 38.190.176.170)</span>
+                <Check className="w-4 h-4 text-primary" />
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase text-muted-foreground">Destino do XUI</label>
+                <Input 
+                  value={sourceIp} 
+                  onChange={(e) => setSourceIp(e.target.value)}
+                  placeholder="Ex: 38.190.176.170" 
+                  className="bg-background/50 font-mono" 
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase text-muted-foreground">Porta do XUI</label>
+                <Input 
+                  value={sourcePort} 
+                  onChange={(e) => setSourcePort(e.target.value)}
+                  placeholder="Ex: 80" 
+                  className="bg-background/50 font-mono" 
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Button 
+                onClick={handleSaveSource} 
+                disabled={isSaving}
+                className="w-fit gap-2 bg-green-500 hover:bg-green-600 text-white font-bold"
+              >
+                {isSaving ? "Salvando..." : "Salvar origem"}
+              </Button>
+              <p className="text-[10px] text-muted-foreground">
+                Origem ativa: A · {sourceIp}:{sourcePort}
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       <Card className="border-border/50 bg-card/50 overflow-hidden">
         <CardHeader className="border-b border-border/50 pb-4 bg-muted/20">
           <div className="flex items-center gap-3">
@@ -29,26 +116,43 @@ export function DomainsTab() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/40">
-                <tr className="hover:bg-accent/5 transition-colors">
-                  <td className="px-4 py-4 font-bold text-xs">CNAME</td>
-                  <td className="px-4 py-4 font-mono text-xs">meudominio.com</td>
-                  <td className="px-4 py-4 font-mono text-xs text-primary">cdnvoods.vr766.com</td>
-                  <td className="px-4 py-4 text-right">
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
-                      <Copy className="w-3.5 h-3.5" />
-                    </Button>
-                  </td>
-                </tr>
-                <tr className="hover:bg-accent/5 transition-colors">
-                  <td className="px-4 py-4 font-bold text-xs">A</td>
-                  <td className="px-4 py-4 font-mono text-xs">meudominio.com</td>
-                  <td className="px-4 py-4 font-mono text-xs text-primary">45.140.192.237</td>
-                  <td className="px-4 py-4 text-right">
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
-                      <Copy className="w-3.5 h-3.5" />
-                    </Button>
-                  </td>
-                </tr>
+                {domains.length === 0 ? (
+                  <>
+                    <tr className="hover:bg-accent/5 transition-colors">
+                      <td className="px-4 py-4 font-bold text-xs">CNAME</td>
+                      <td className="px-4 py-4 font-mono text-xs">meudominio.com</td>
+                      <td className="px-4 py-4 font-mono text-xs text-primary italic">cdnvoods.vr766.com (Exemplo)</td>
+                      <td className="px-4 py-4 text-right">
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
+                          <Copy className="w-3.5 h-3.5" />
+                        </Button>
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-accent/5 transition-colors">
+                      <td className="px-4 py-4 font-bold text-xs">A</td>
+                      <td className="px-4 py-4 font-mono text-xs">meudominio.com</td>
+                      <td className="px-4 py-4 font-mono text-xs text-primary italic">45.140.192.237 (Exemplo)</td>
+                      <td className="px-4 py-4 text-right">
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
+                          <Copy className="w-3.5 h-3.5" />
+                        </Button>
+                      </td>
+                    </tr>
+                  </>
+                ) : (
+                  domains.map((domain: any) => (
+                    <tr key={domain.id} className="hover:bg-accent/5 transition-colors">
+                      <td className="px-4 py-4 font-bold text-xs uppercase">{domain.type}</td>
+                      <td className="px-4 py-4 font-mono text-xs">{domain.domain_name}</td>
+                      <td className="px-4 py-4 font-mono text-xs text-primary">{domain.content}</td>
+                      <td className="px-4 py-4 text-right">
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
+                          <Copy className="w-3.5 h-3.5" />
+                        </Button>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

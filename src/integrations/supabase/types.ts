@@ -126,6 +126,33 @@ export type Database = {
           },
         ]
       }
+      protected_domains: {
+        Row: {
+          content: string
+          created_at: string | null
+          domain_name: string
+          id: string
+          type: string
+          updated_at: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          domain_name: string
+          id?: string
+          type?: string
+          updated_at?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          domain_name?: string
+          id?: string
+          type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       sources: {
         Row: {
           api_url: string | null

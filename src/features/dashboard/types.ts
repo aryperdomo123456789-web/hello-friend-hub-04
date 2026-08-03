@@ -10,6 +10,14 @@ export interface DashboardStats {
   sourceCount: number;
 }
 
+export interface ProtectedDomain {
+  id: string;
+  domain_name: string;
+  type: string;
+  content: string;
+  created_at?: string | null;
+}
+
 export interface Source {
   id: string;
   name: string;
