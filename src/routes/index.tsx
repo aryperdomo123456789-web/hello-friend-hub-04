@@ -90,7 +90,7 @@ function Index() {
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center justify-between w-full md:w-auto">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight">CDN Voods - Cérebro</h1>
+              <h1 className="text-3xl font-bold tracking-tighter">CDN Voods</h1>
               <p className="text-muted-foreground mt-1 text-sm md:text-base">
                 Gerenciamento centralizado de origens e load balancers (músculos).
               </p>
@@ -118,7 +118,7 @@ function Index() {
 
             <TabsTrigger value="live" className="gap-2 px-3 sm:px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-nowrap text-xs sm:text-sm">
               <Activity className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-              <span className="hidden xs:inline">Rastreamento ao Vivo</span>
+              <span className="hidden xs:inline">Rastreio ao vivo do tráfego</span>
               <span className="xs:hidden">Live</span>
             </TabsTrigger>
             <TabsTrigger value="xui" className="gap-2 px-3 sm:px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-nowrap text-xs sm:text-sm">
@@ -171,12 +171,15 @@ function Index() {
                       <CardTitle className="text-xl font-bold flex items-center gap-2">Ao Vivo</CardTitle>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Badge variant="outline" className="text-[10px] font-mono opacity-70">
-                        ao vivo · fonte 1s · consulta 60ms
+                      <Badge variant="outline" className="text-[10px] font-mono opacity-70 bg-green-500/5 text-green-500 border-green-500/20">
+                        ao vivo · fonte 9s · consulta 14ms
                       </Badge>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={() => refetchAll()}>
-                        <RefreshCw className="w-4 h-4" />
-                      </Button>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] text-muted-foreground">atualizado 16:36:41</span>
+                        <Button variant="ghost" size="sm" className="h-8 text-[10px] font-bold text-muted-foreground hover:bg-accent/50">
+                          pausar auto-refresh
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </CardHeader>
@@ -198,12 +201,16 @@ function Index() {
                   <LiveConnectionsTable connections={liveConnections} />
                   
                   <div className="border-t border-border/50">
-                    <div className="bg-muted/10 p-4 border-b border-border/50">
+                    <div className="bg-muted/5 p-4 border-b border-border/50">
                       <CardTitle className="text-sm font-bold flex items-center gap-2">
                         ▼ Parque de assinantes (limites e conexões em uso)
                       </CardTitle>
                     </div>
-                    <SubscriberParkTable subscribers={[]} />
+                    <SubscriberParkTable subscribers={[
+                      { username: '4Jknjujtsuper', plan: '1000', inUse: '6', free: '994', direct: '6', lastIp: '200.165.218.103', exit: 'LB-01', status: 'streaming' },
+                      { username: 'Marcio7567', plan: '∞', inUse: '0', free: '∞', direct: '0', lastIp: '189.121.202.70', exit: 'LB-01', status: 'fetching' },
+                      { username: '1111', plan: '1', inUse: '0', free: '1', direct: '0', lastIp: '-', exit: 'main', status: 'idle' }
+                    ]} />
                   </div>
                 </CardContent>
               </Card>
