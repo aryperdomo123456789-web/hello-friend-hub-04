@@ -90,16 +90,25 @@ function Index() {
         </header>
 
         <Tabs defaultValue="live" className="w-full space-y-6">
-          <TabsList className="bg-card/50 border border-border/50 p-1 rounded-xl h-auto">
+          <TabsList className="bg-card/50 border border-border/50 p-1 rounded-xl h-auto flex-wrap justify-start">
             <TabsTrigger value="live" className="gap-2 px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Activity className="w-4 h-4" />
-              Painel Geral
+              Rastreamento ao Vivo
             </TabsTrigger>
             <TabsTrigger value="xui" className="gap-2 px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Monitor className="w-4 h-4" />
               Gerência XUI
             </TabsTrigger>
+            <TabsTrigger value="domains" className="gap-2 px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Globe className="w-4 h-4" />
+              Domínios
+            </TabsTrigger>
+            <TabsTrigger value="lb" className="gap-2 px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Server className="w-4 h-4" />
+              Músculos (LB)
+            </TabsTrigger>
           </TabsList>
+
 
           <TabsContent value="live" className="space-y-8 mt-0 outline-none">
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
@@ -301,82 +310,152 @@ function Index() {
             </Card>
           </div>
         </div>
+      </TabsContent>
 
-        {/* Collapsible Legacy Sections */}
-        <div className="space-y-4">
-          <Accordion type="single" collapsible className="space-y-4 border-none">
-            <AccordionItem value="users" className="border border-border/50 rounded-xl bg-card/50 overflow-hidden px-4">
-              <AccordionTrigger className="hover:no-underline py-4">
-                <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-muted-foreground">
-                  <Users className="w-4 h-4" />
-                  Parque de Assinantes (limites e conexões em uso)
+      <TabsContent value="domains" className="space-y-8 mt-0 outline-none">
+
+            <Card className="border-border/50 bg-card/50 overflow-hidden">
+              <CardHeader className="border-b border-border/50 pb-4 bg-muted/20">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                    <Globe className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-lg font-bold">2. Aponte seus domínios na Cloudflare (nuvem cinza / DNS only)</CardTitle>
+                    <CardDescription>Configure os domínios de proteção para o seu sistema.</CardDescription>
+                  </div>
                 </div>
-              </AccordionTrigger>
-              <AccordionContent className="pb-4 pt-0">
-                <div className="rounded-lg border border-border/40 overflow-hidden">
-                  <table className="w-full text-left text-xs border-collapse">
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="rounded-xl border border-border/40 overflow-hidden mb-6">
+                  <table className="w-full text-left text-sm border-collapse">
                     <thead className="bg-muted/30">
                       <tr className="border-b border-border/50 text-[10px] font-bold uppercase text-muted-foreground">
-                        <th className="px-4 py-3">Usuário</th>
-                        <th className="px-4 py-3">Plano</th>
-                        <th className="px-4 py-3">Em Uso</th>
-                        <th className="px-4 py-3">Direct</th>
-                        <th className="px-4 py-3">IP Final</th>
-                        <th className="px-4 py-3">Saída</th>
-                        <th className="px-4 py-3 text-right">Status</th>
+                        <th className="px-4 py-4">TIPO</th>
+                        <th className="px-4 py-4">NOME</th>
+                        <th className="px-4 py-4">CONTEÚDO</th>
+                        <th className="px-4 py-4 text-right">AÇÕES</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border/40">
-                      <tr><td colSpan={7} className="px-4 py-8 text-center text-muted-foreground italic">nenhum dado disponível</td></tr>
-                    </tbody>
-                  </table>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-
-            <AccordionItem value="health" className="border border-border/50 rounded-xl bg-card/50 overflow-hidden px-4">
-              <AccordionTrigger className="hover:no-underline py-4">
-                <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-muted-foreground">
-                  <Activity className="w-4 h-4 text-primary" />
-                  Saúde do Host Final de Direct Source (quem barra a CDN)
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="pb-4 pt-0">
-                <div className="rounded-lg border border-border/40 overflow-hidden">
-                  <table className="w-full text-left text-xs border-collapse">
-                    <thead className="bg-muted/30">
-                      <tr className="border-b border-border/50 text-[10px] font-bold uppercase text-muted-foreground">
-                        <th className="px-4 py-3">Host Final</th>
-                        <th className="px-4 py-3">Veredito</th>
-                        <th className="px-4 py-3 text-right">Falha</th>
+                      <tr className="hover:bg-accent/5 transition-colors">
+                        <td className="px-4 py-4 font-bold text-xs">CNAME</td>
+                        <td className="px-4 py-4 font-mono text-xs">meudominio.com</td>
+                        <td className="px-4 py-4 font-mono text-xs text-primary">cdnvoods.vr766.com</td>
+                        <td className="px-4 py-4 text-right">
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
+                            <Copy className="w-3.5 h-3.5" />
+                          </Button>
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody className="divide-y divide-border/40">
-                      {health.length === 0 ? (
-                        <tr><td colSpan={3} className="px-4 py-8 text-center text-muted-foreground italic">nenhum host observado na última hora</td></tr>
-                      ) : (
-                        health.map((h: any) => (
-                          <tr key={h.id}>
-                            <td className="px-4 py-3 font-mono">{h.host}</td>
-                            <td className="px-4 py-3">
-                              <Badge variant={h.verdict === 'ok' ? 'default' : 'destructive'} className="text-[10px]">{h.verdict}</Badge>
-                            </td>
-                            <td className="px-4 py-3 text-right">{h.fail_rate}%</td>
-                          </tr>
-                        ))
-                      )}
+                      <tr className="hover:bg-accent/5 transition-colors">
+                        <td className="px-4 py-4 font-bold text-xs">A</td>
+                        <td className="px-4 py-4 font-mono text-xs">meudominio.com</td>
+                        <td className="px-4 py-4 font-mono text-xs text-primary">45.140.192.237</td>
+                        <td className="px-4 py-4 text-right">
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
+                            <Copy className="w-3.5 h-3.5" />
+                          </Button>
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </div>
 
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Button className="gap-2 shadow-lg shadow-primary/20">
+                    <Plus className="w-4 h-4" />
+                    Cadastrar Novo Domínio
+                  </Button>
+                  <Button variant="outline" className="gap-2">
+                    <RefreshCw className="w-4 h-4" />
+                    Sincronizar DNS
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
 
+            <div className="p-6 rounded-2xl bg-amber-500/5 border border-amber-500/10 space-y-3">
+              <div className="flex items-center gap-2 text-amber-500">
+                <AlertTriangle className="w-5 h-5" />
+                <h3 className="font-bold text-sm uppercase tracking-wider">Atenção ao DNS</h3>
+              </div>
+              <p className="text-[12px] text-muted-foreground leading-relaxed">
+                Este painel protege um XUI. Cadastre a origem uma única vez; todos os domínios de proteção usam ela. Este dado fica apenas no banco local, nunca vira DNS público e nunca aparece em playlist, player_api ou EPG.
+              </p>
+            </div>
           </TabsContent>
 
+          <TabsContent value="lb" className="space-y-8 mt-0 outline-none">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <Card className="md:col-span-2 border-border/50 bg-card/50 overflow-hidden">
+                <CardHeader className="border-b border-border/50 pb-4">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-lg font-bold flex items-center gap-2">
+                      <Server className="w-5 h-5 text-primary" />
+                      Status dos Músculos (Load Balancers)
+                    </CardTitle>
+                    <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20">
+                      {muscles.length} Ativos
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="divide-y divide-border/40">
+                    {muscles.map((muscle: any) => (
+                      <div key={muscle.id} className="p-6 flex items-center justify-between hover:bg-accent/5 transition-colors">
+                        <div className="flex items-center gap-4">
+                          <div className={`w-3 h-3 rounded-full ${muscle.status === 'online' ? 'bg-green-500 shadow-[0_0_12px_rgba(34,197,94,0.6)]' : 'bg-gray-400'} animate-pulse`} />
+                          <div>
+                            <div className="font-bold">{muscle.name}</div>
+                            <div className="text-xs text-muted-foreground font-mono mt-0.5">{muscle.ip}</div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <div className="text-right hidden sm:block">
+                            <div className="text-[10px] uppercase font-bold text-muted-foreground">Carga</div>
+                            <div className="text-xs font-mono">12% CPU / 450MB</div>
+                          </div>
+                          <Badge className={muscle.status === 'online' ? 'bg-green-500 hover:bg-green-600' : 'bg-muted text-muted-foreground'}>
+                            {muscle.status === 'online' ? 'PROTEGENDO' : 'OFFLINE'}
+                          </Badge>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-border/50 bg-card/50 overflow-hidden">
+                <CardHeader className="border-b border-border/50 pb-4">
+                  <CardTitle className="text-lg font-bold">Instalação Rápida</CardTitle>
+                </CardHeader>
+                <CardContent className="p-6 space-y-6">
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    Transforme qualquer VPS Linux (Ubuntu/Debian) em um Músculo de entrega em menos de 2 minutos.
+                  </p>
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-bold uppercase text-muted-foreground">Comando de Instalação</label>
+                    <div className="bg-zinc-950 rounded-xl p-4 font-mono text-[11px] text-zinc-300 border border-zinc-800 relative group overflow-hidden">
+                      <code className="break-all">curl -sSL https://voods.app/install-lb | bash</code>
+                      <Button variant="ghost" size="icon" className="absolute right-2 top-2 h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity bg-zinc-900/50">
+                        <Copy className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  </div>
+                  <Button className="w-full gap-2 font-bold shadow-lg shadow-primary/20">
+                    <Plus className="w-4 h-4" />
+                    Registrar Músculo
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+
           <TabsContent value="xui" className="space-y-8 mt-0 outline-none">
+
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <Card className="border-border/50 bg-card/50">
                 <CardContent className="p-4 flex flex-col gap-1">
