@@ -112,6 +112,10 @@ function Index() {
 
         <Tabs defaultValue="live" className="w-full space-y-6">
           <TabsList className="bg-card/50 border border-border/50 p-1 rounded-xl h-auto flex gap-1 overflow-x-auto no-scrollbar justify-start mb-6">
+            <div className="flex items-center gap-1 px-2 border-r border-border/50 mr-1">
+              <span className="text-[10px] font-bold text-muted-foreground uppercase whitespace-nowrap">Dashboard</span>
+            </div>
+
             <TabsTrigger value="live" className="gap-2 px-3 sm:px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-nowrap text-xs sm:text-sm">
               <Activity className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               <span className="hidden xs:inline">Rastreamento ao Vivo</span>
