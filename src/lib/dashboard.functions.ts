@@ -223,8 +223,8 @@ export const deleteXuiUser = createServerFn({ method: "POST" })
       const { data: source } = await supabaseAdmin
         .from("sources")
         .select("*")
-        .order("created_at", { ascending: false })
         .limit(1)
+
         .single();
 
       if (!source) throw new Error("Configuração da fonte XUI não encontrada.");
@@ -253,8 +253,8 @@ export const toggleXuiUserStatus = createServerFn({ method: "POST" })
       const { data: source } = await supabaseAdmin
         .from("sources")
         .select("*")
-        .order("created_at", { ascending: false })
         .limit(1)
+
         .single();
 
       if (!source) throw new Error("Configuração da fonte XUI não encontrada.");
