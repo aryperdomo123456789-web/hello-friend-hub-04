@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { UserLine } from "../../types";
+
 
 interface SubscriberParkTableProps {
   subscribers: any[];
