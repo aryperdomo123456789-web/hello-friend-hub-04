@@ -22,11 +22,12 @@ export async function getXuiDb(config: any) {
   const database = config.db_name || config.database || 'xui';
   const port = parseInt(config.db_port || config.port) || 3306;
 
-  console.log(`[MySQL] Tentando conectar em ${host}:${port} (SSL desabilitado por padrão)`);
+  console.log(`[MySQL] Tentando conectar em ${host}:${port}`);
 
   try {
     // Configuração otimizada para Cloudflare Workers/Edge
-    const connection = await mysql.createConnection({
+    // Removido o campo 'ssl' para evitar o erro "Server does not support secure connection"
+    const connectionOptions: any = {
       host,
       user,
       password,
@@ -35,22 +36,20 @@ export async function getXuiDb(config: any) {
       connectTimeout: 15000,
       // Desabilita eval para compatibilidade com ambientes que bloqueiam eval()
       disableEval: true,
-      // O erro "Server does not support secure connection" acontece quando forçamos SSL 
-      // em um servidor que não tem SSL habilitado. Vamos remover o objeto SSL ou deixá-lo nulo.
-      ssl: undefined,
       // Aumenta a tolerância para servidores legados
       waitForConnections: true,
       connectionLimit: 1,
       queueLimit: 0
-    });
-    
+    };
+
+    const connection = await mysql.createConnection(connectionOptions);
     return connection;
   } catch (error: any) {
     console.error("[MySQL] Erro fatal de conexão:", error.message);
     
-    // Tenta uma segunda vez se o erro for de SSL, explicitamente desativando SSL
+    // Fallback: se falhar por SSL, tentamos explicitamente sem SSL (embora omitir deva funcionar)
     if (error.message.includes('secure connection') || error.message.includes('SSL')) {
-      console.log("[MySQL] Tentando reconexão sem SSL...");
+      console.log("[MySQL] Tentando reconexão forçando sem SSL...");
       try {
         return await mysql.createConnection({
           host,
@@ -59,9 +58,8 @@ export async function getXuiDb(config: any) {
           database,
           port,
           connectTimeout: 10000,
-          disableEval: true,
-          ssl: undefined
-        });
+          disableEval: true
+        } as any);
       } catch (retryError: any) {
         throw new Error(`Falha na conexão XUI (Retry): ${retryError.message}`);
       }
