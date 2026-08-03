@@ -9,10 +9,10 @@ import mysql from 'mysql2/promise';
 
 export async function getXuiDb(config: any) {
   // Garantir que process e process.nextTick existam (polyfills de borda)
-  // Nota: Isso ajuda a evitar o erro "No such module node:process" em alguns contextos de importação
   if (typeof globalThis !== 'undefined' && !globalThis.process) {
     (globalThis as any).process = { 
-      env: {}, 
+      env: { NODE_ENV: 'production' }, 
+      version: 'v18.0.0',
       nextTick: (fn: any, ...args: any[]) => setTimeout(() => fn(...args), 0) 
     };
   }
@@ -26,33 +26,32 @@ export async function getXuiDb(config: any) {
   console.log(`[MySQL] Tentando conectar em ${host}:${port}`);
 
   try {
-    // Configuração otimizada para Cloudflare Workers/Edge
-    // Removido o campo 'ssl' para evitar o erro "Server does not support secure connection"
     const connectionOptions: any = {
       host,
       user,
       password,
       database,
       port,
-      connectTimeout: 20000, // Aumentado para 20s para maior estabilidade
-      // Desabilita eval para compatibilidade com ambientes que bloqueiam eval()
+      connectTimeout: 20000,
       disableEval: true,
-      // Aumenta a tolerância para servidores legados
       waitForConnections: true,
       connectionLimit: 1,
       queueLimit: 0,
       enableKeepAlive: true,
-      keepAliveInitialDelay: 10000
+      keepAliveInitialDelay: 10000,
+      // Garante que o driver não tente carregar módulos nativos de autenticação se não necessário
+      authPlugins: {}
     };
 
+    // Tenta conexão direta
     const connection = await mysql.createConnection(connectionOptions);
     return connection;
   } catch (error: any) {
     console.error("[MySQL] Erro fatal de conexão:", error.message);
     
-    // Fallback: se falhar por SSL, tentamos explicitamente sem SSL (embora omitir deva funcionar)
-    if (error.message.includes('secure connection') || error.message.includes('SSL')) {
-      console.log("[MySQL] Tentando reconexão forçando sem SSL...");
+    // Se o erro for sobre autenticação ou SSL, tentamos uma abordagem mais simples
+    if (error.message.includes('secure connection') || error.message.includes('SSL') || error.message.includes('auth')) {
+      console.log("[MySQL] Tentando reconexão simplificada...");
       try {
         return await mysql.createConnection({
           host,
