@@ -190,6 +190,15 @@ function Index() {
                     </div>
                   </div>
                   <LiveConnectionsTable connections={liveConnections} />
+                  
+                  <div className="border-t border-border/50">
+                    <div className="bg-muted/10 p-4 border-b border-border/50">
+                      <CardTitle className="text-sm font-bold flex items-center gap-2">
+                        ▼ Parque de assinantes (limites e conexões em uso)
+                      </CardTitle>
+                    </div>
+                    <SubscriberParkTable subscribers={[]} />
+                  </div>
                 </CardContent>
               </Card>
 
