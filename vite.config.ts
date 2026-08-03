@@ -29,7 +29,7 @@ export default defineConfig({
     ssr: {
       // Explicitly externalize mysql2 to let workerd's nodejs_compat handle it
       external: ['mysql2'],
-      noExternal: ['process', 'stream-browserify', 'buffer', 'util'],
+      noExternal: ['process', 'stream-browserify', 'buffer', 'util', '@supabase/supabase-js'],
     },
   },
 });
