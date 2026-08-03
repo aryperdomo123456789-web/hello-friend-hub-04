@@ -15,12 +15,11 @@ export function LiveConnectionsTable({ connections }: LiveConnectionsTableProps)
           <tr className="bg-muted/30 text-[10px] uppercase tracking-wider font-bold text-muted-foreground border-b border-border/50">
             <th className="px-4 py-3">Estado</th>
             <th className="px-4 py-3">Assinante</th>
-            <th className="px-4 py-3">Tipo</th>
             <th className="px-4 py-3">Está Assistindo</th>
-            <th className="px-4 py-3">IP</th>
+            <th className="px-4 py-3">IP Final</th>
             <th className="px-4 py-3">App</th>
-            <th className="px-4 py-3">Entrega</th>
             <th className="px-4 py-3">Saída</th>
+            <th className="px-4 py-3">Status</th>
             <th className="px-4 py-3 text-right">Ação</th>
           </tr>
         </thead>
@@ -44,11 +43,6 @@ export function LiveConnectionsTable({ connections }: LiveConnectionsTableProps)
                   <div className="font-bold text-sm text-foreground">{conn.username}</div>
                 </td>
                 <td className="px-4 py-3">
-                  <Badge variant="outline" className="text-[10px] px-2 h-5 bg-blue-500/10 text-blue-400 border-blue-500/20">
-                    {conn.stream_type}
-                  </Badge>
-                </td>
-                <td className="px-4 py-3">
                   <div className="text-xs font-medium max-w-[150px] truncate">{conn.stream_id}</div>
                 </td>
                 <td className="px-4 py-3">
@@ -58,11 +52,13 @@ export function LiveConnectionsTable({ connections }: LiveConnectionsTableProps)
                   <div className="text-[11px] truncate max-w-[100px] text-muted-foreground">{conn.user_agent || '-'}</div>
                 </td>
                 <td className="px-4 py-3">
-                  <div className="text-[11px] font-bold text-primary">Direta</div>
+                  <Badge variant="outline" className="text-[10px] bg-card border-border/50 font-bold">
+                    {conn.muscles?.name || 'main'}
+                  </Badge>
                 </td>
                 <td className="px-4 py-3">
-                  <Badge variant="outline" className="text-[10px] bg-card border-border/50">
-                    {conn.muscles?.name || 'Main'}
+                  <Badge variant="outline" className="text-[10px] bg-green-500/10 text-green-500 border-green-500/20 font-bold">
+                    fetching
                   </Badge>
                 </td>
                 <td className="px-4 py-3 text-right">
