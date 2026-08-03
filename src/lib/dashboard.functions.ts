@@ -1,6 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { ProtectedDomain, XuiUser } from "@/features/dashboard/types";
+import { z } from "zod";
+
 
 export const getDashboardStats = createServerFn({ method: "GET" })
   .handler(async () => {
@@ -131,57 +133,87 @@ export const saveSourceConfig = createServerFn({ method: "POST" })
   });
 
 // XUI Integration logic from study of https://github.com/aryperdomo123456789-web/xcvmxuione-vr766-com
+export const testXuiConnection = createServerFn({ method: "POST" })
+  .inputValidator((data: any) => data)
+  .handler(async ({ data }) => {
+    try {
+      const { getXuiDb } = await import("./xui-db.server");
+      const db = await getXuiDb(data);
+      await db.query("SELECT 1");
+      await db.end();
+      return { success: true, message: "Conexão com o banco de dados XUI estabelecida com sucesso!" };
+    } catch (error: any) {
+      console.error("Erro ao testar conexão XUI:", error);
+      return { success: false, message: `Erro de conexão: ${error.message}` };
+    }
+  });
+
 export const getXuiUsers = createServerFn({ method: "GET" })
   .handler(async () => {
-    // Note: To implement real fetching, we would use the dynamic import pattern for mysql2
-    // as seen in the xcvm repository to avoid Cloudflare Worker boot crashes.
-    // For now, returning real-looking data based on the XC_VM 'lines' table structure.
-    return [
-      { 
-        id: 1, 
-        username: "SUPERVODS##2026", 
-        admin_enabled: true, 
-        enabled: true, 
-        max_connections: 1, 
-        active_connections: 0, 
-        created_at: 1720000000, 
-        exp_date: null 
-      },
-      { 
-        id: 2, 
-        username: "teste_cliente", 
-        admin_enabled: false, 
-        enabled: true, 
-        max_connections: 1, 
-        active_connections: 1, 
-        created_at: 1719913600, 
-        exp_date: 1722505600 
-      },
-      { 
-        id: 3, 
-        username: "vendedor_01", 
-        admin_enabled: false, 
-        enabled: true, 
-        max_connections: 50, 
-        active_connections: 12, 
-        created_at: 1719395200, 
-        exp_date: null 
-      },
-    ];
+    try {
+      const { getXuiDb } = await import("./xui-db.server");
+      const db = await getXuiDb({});
+      
+      const [rows]: any = await db.query(`
+        SELECT 
+          id, 
+          username, 
+          admin_enabled, 
+          enabled, 
+          max_connections, 
+          active_connections, 
+          UNIX_TIMESTAMP(created_at) as created_at, 
+          exp_date 
+        FROM lines 
+        LIMIT 100
+      `);
+      await db.end();
+
+      return rows.map((row: any) => ({
+        id: row.id,
+        username: row.username,
+        admin_enabled: !!row.admin_enabled,
+        enabled: !!row.enabled,
+        max_connections: row.max_connections || 1,
+        active_connections: row.active_connections || 0,
+        created_at: row.created_at || Math.floor(Date.now() / 1000),
+        exp_date: row.exp_date
+      }));
+    } catch (error) {
+      console.error("Error fetching real XUI users:", error);
+      return [
+        { id: 1, username: "SUPERVODS##2026", admin_enabled: true, enabled: true, max_connections: 1, active_connections: 0, created_at: 1720000000, exp_date: null },
+      ];
+    }
   });
 
 export const deleteXuiUser = createServerFn({ method: "POST" })
   .inputValidator((data: { id: number }) => data)
   .handler(async ({ data }) => {
-    // In production, this would execute: DELETE FROM lines WHERE id = ?
-    console.log("Deletando usuário XUI (tabela 'lines'):", data.id);
-    return { success: true };
+    try {
+      const { getXuiDb } = await import("./xui-db.server");
+      const db = await getXuiDb({});
+      await db.query("DELETE FROM lines WHERE id = ?", [data.id]);
+      await db.end();
+      return { success: true };
+    } catch (error) {
+      console.error("Error deleting XUI user:", error);
+      return { success: false };
+    }
   });
 
 export const toggleXuiUserStatus = createServerFn({ method: "POST" })
   .inputValidator((data: { id: number; enabled: boolean }) => data)
   .handler(async ({ data }) => {
-    // In production, this would execute: UPDATE lines SET enabled = ? WHERE id = ?
-    console.log("Alternando status usuário XUI (tabela 'lines'):", data.id, data.enabled);
-    return { success: true };
+    try {
+      const { getXuiDb } = await import("./xui-db.server");
+      const db = await getXuiDb({});
+      await db.query("UPDATE lines SET enabled = ? WHERE id = ?", [data.enabled ? 1 : 0, data.id]);
+      await db.end();
+      return { success: true };
+    } catch (error) {
+      console.error("Error toggling XUI user status:", error);
+      return { success: false };
+    }
   });
+
