@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
-import { ProtectedDomain } from "@/features/dashboard/types";
+import { ProtectedDomain, XuiUser } from "@/features/dashboard/types";
 
 export const getDashboardStats = createServerFn({ method: "GET" })
   .handler(async () => {
