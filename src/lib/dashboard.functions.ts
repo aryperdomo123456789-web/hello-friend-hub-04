@@ -127,6 +127,7 @@ export const saveSourceConfig = createServerFn({ method: "POST" })
       db_password: data.password,
       api_url: data.apiUrl,
       api_token: data.apiToken,
+      origin_type: data.originType || 'A',
       updated_at: new Date().toISOString()
     };
 
@@ -183,21 +184,28 @@ export const getXuiUsers = createServerFn({ method: "GET" })
         database: source.db_name
       });
       
-      const [rows]: any = await db.query(`
-        SELECT 
-          l.id, 
-          l.username, 
-          l.password,
-          l.enabled,
-          l.admin_enabled,
-          l.max_connections,
-          l.created_at,
-          l.exp_date,
-          (SELECT COUNT(*) FROM lines_live ll WHERE ll.user_id = l.id) AS active_connections
-        FROM \`lines\` l
-        ORDER BY l.id DESC
-        LIMIT 500
-      `);
+      // XC_VM use 'users' table, XUI use 'lines'
+      let rows: any[] = [];
+      try {
+        const [linesRows]: any = await db.query(`
+          SELECT 
+            l.id, l.username, l.password, l.enabled, l.admin_enabled,
+            l.max_connections, l.created_at, l.exp_date,
+            (SELECT COUNT(*) FROM lines_live ll WHERE ll.user_id = l.id) AS active_connections
+          FROM \`lines\` l ORDER BY l.id DESC LIMIT 500
+        `);
+        rows = linesRows;
+      } catch (err) {
+        // Fallback to 'users' table (XC_VM style)
+        const [usersRows]: any = await db.query(`
+          SELECT 
+            u.id, u.username, u.password, u.enabled, u.admin_enabled,
+            u.max_connections, u.created_at, u.exp_date,
+            (SELECT COUNT(*) FROM user_live ul WHERE ul.user_id = u.id) AS active_connections
+          FROM \`users\` u ORDER BY u.id DESC LIMIT 500
+        `);
+        rows = usersRows;
+      }
       await db.end();
 
       return rows.map((row: any) => ({

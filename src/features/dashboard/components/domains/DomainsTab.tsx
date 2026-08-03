@@ -1,25 +1,52 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Globe, Plus, RefreshCw, Copy, AlertTriangle, Shield, Check } from "lucide-react";
-import { useState } from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Globe, Plus, RefreshCw, Copy, AlertTriangle, Shield, Check, ChevronDown } from "lucide-react";
+import { useState, useEffect } from "react";
 import { useDashboardData } from "../../hooks/use-dashboard-data";
 import { useServerFn } from "@tanstack/react-start";
-import { saveSourceConfig } from "@/lib/dashboard.functions";
+import { saveSourceConfig, getSources } from "@/lib/dashboard.functions";
 import { toast } from "sonner";
 
 export function DomainsTab() {
   const { domains } = useDashboardData();
   const updateSource = useServerFn(saveSourceConfig);
+  const fetchSources = useServerFn(getSources);
   
-  const [sourceIp, setSourceIp] = useState("38.190.176.170");
+  const [sourceIp, setSourceIp] = useState("");
   const [sourcePort, setSourcePort] = useState("80");
+  const [originType, setOriginType] = useState<'A' | 'CNAME'>('A');
   const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const sources = await fetchSources();
+        if (sources && sources.length > 0) {
+          const s = sources[0] as any;
+          setSourceIp(s.ip || "");
+          setSourcePort(s.db_port?.toString() || "80");
+          setOriginType(s.origin_type || 'A');
+        }
+      } catch (e) {
+        console.error("Erro ao carregar configurações de origem:", e);
+      }
+    };
+    loadData();
+  }, [fetchSources]);
 
   const handleSaveSource = async () => {
     setIsSaving(true);
     try {
-      await updateSource({ data: { ip: sourceIp, port: sourcePort, apiUrl: `http://${sourceIp}/fejvCHkR` } });
+      await updateSource({ 
+        data: { 
+          ip: sourceIp, 
+          port: sourcePort, 
+          originType,
+          apiUrl: `http://${sourceIp}/fejvCHkR` 
+        } 
+      });
       toast.success("Origem salva com sucesso!");
     } catch (e) {
       toast.error("Erro ao salvar origem.");
@@ -49,19 +76,26 @@ export function DomainsTab() {
           <div className="space-y-4">
             <div className="space-y-2">
               <label className="text-xs font-bold uppercase text-muted-foreground">Tipo de origem</label>
-              <div className="bg-background/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground flex items-center justify-between">
-                <span>A — o main do XUI é só IP (ex: 38.190.176.170)</span>
-                <Check className="w-4 h-4 text-primary" />
-              </div>
+              <Select value={originType} onValueChange={(val: any) => setOriginType(val)}>
+                <SelectTrigger className="bg-background/50 border border-border/50 rounded-lg font-medium">
+                  <SelectValue placeholder="Selecione o tipo" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="A">A — o main do XUI é só IP (ex: 38.190.176.170)</SelectItem>
+                  <SelectItem value="CNAME">CNAME — o main do XUI tem DNS (ex: dafonte.uk)</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-xs font-bold uppercase text-muted-foreground">Destino do XUI</label>
+                <label className="text-xs font-bold uppercase text-muted-foreground">
+                  {originType === 'A' ? 'IP da Origem' : 'Domínio da Origem'}
+                </label>
                 <Input 
                   value={sourceIp} 
                   onChange={(e) => setSourceIp(e.target.value)}
-                  placeholder="Ex: 38.190.176.170" 
+                  placeholder={originType === 'A' ? "Ex: 38.190.176.170" : "Ex: dafonte.uk"} 
                   className="bg-background/50 font-mono" 
                 />
               </div>
@@ -85,7 +119,7 @@ export function DomainsTab() {
                 {isSaving ? "Salvando..." : "Salvar origem"}
               </Button>
               <p className="text-[10px] text-muted-foreground">
-                Origem ativa: A · {sourceIp}:{sourcePort}
+                Origem ativa: {originType} · {sourceIp}:{sourcePort}
               </p>
             </div>
           </div>
