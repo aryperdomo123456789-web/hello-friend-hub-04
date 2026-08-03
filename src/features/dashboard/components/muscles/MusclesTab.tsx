@@ -5,6 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Server, Copy, Check, Terminal } from "lucide-react";
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogDescription, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogTrigger 
+} from "@/components/ui/dialog";
 import { MuscleList } from "./MuscleList";
 import { Muscle } from "../../types";
 import { getLbInstallerScript, addMuscle, deployToMuscle } from "@/lib/muscles.functions";
