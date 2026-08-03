@@ -1,4 +1,6 @@
 import mysql from 'mysql2/promise';
+import 'process'; // Force process polyfill
+
 
 /**
  * Nota sobre compatibilidade Edge:

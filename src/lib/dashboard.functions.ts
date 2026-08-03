@@ -154,7 +154,11 @@ export const testXuiConnection = createServerFn({ method: "POST" })
     try {
       const { getXuiDb } = await import("./xui-db.server");
       const db = await getXuiDb(data);
-      await db.query("SELECT 1");
+      // Usando query simples com timeout para evitar travamentos no Edge
+      await Promise.race([
+        db.query("SELECT 1"),
+        new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout de conexão")), 10000))
+      ]);
       await db.end();
       return { success: true, message: "Conexão com o banco de dados XUI estabelecida com sucesso!" };
     } catch (error: any) {
