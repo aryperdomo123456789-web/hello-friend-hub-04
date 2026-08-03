@@ -30,9 +30,10 @@ export function UsersTab() {
   const [search, setSearch] = useState("");
   const queryClient = useQueryClient();
 
-  const { data: users = [], isLoading } = useQuery({
+  const { data: users = [], isLoading, error } = useQuery({
     queryKey: ["xui-users"],
-    queryFn: () => getXuiUsers()
+    queryFn: () => getXuiUsers(),
+    retry: 1
   });
 
   const deleteMutation = useMutation({
@@ -100,6 +101,12 @@ export function UsersTab() {
                    <tr>
                     <td colSpan={6} className="px-6 py-12 text-center text-sm text-muted-foreground">
                       carregando usuários...
+                    </td>
+                  </tr>
+                ) : error ? (
+                  <tr>
+                    <td colSpan={6} className="px-6 py-12 text-center text-sm text-destructive font-bold">
+                      Erro ao carregar usuários: {(error as any).message || "Erro de conexão com o banco"}
                     </td>
                   </tr>
                 ) : filteredUsers.length === 0 ? (
