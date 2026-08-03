@@ -18,6 +18,7 @@ export function DomainsTab() {
   const [sourcePort, setSourcePort] = useState("80");
   const [originType, setOriginType] = useState<'A' | 'CNAME'>('A');
   const [isSaving, setIsSaving] = useState(false);
+  const [domainsInput, setDomainsInput] = useState("");
 
   useEffect(() => {
     const loadData = async () => {
@@ -54,6 +55,16 @@ export function DomainsTab() {
       setIsSaving(false);
     }
   };
+
+  const handleProtectDomains = () => {
+    if (!domainsInput.trim()) {
+      toast.error("Digite pelo menos um domínio.");
+      return;
+    }
+    toast.info("Função de processamento em massa será conectada ao Cérebro.");
+    setDomainsInput("");
+  };
+
 
   return (
     <div className="space-y-8">
@@ -133,55 +144,119 @@ export function DomainsTab() {
               <Globe className="w-5 h-5" />
             </div>
             <div>
-              <CardTitle className="text-lg font-bold">2. Aponte seus domínios na Cloudflare SEMPRE PARA O MAIN</CardTitle>
-              <CardDescription>O IP/domínio da origem XUI nunca é publicado. Configure os domínios de proteção apontando para o Cérebro.</CardDescription>
+              <CardTitle className="text-lg font-bold">2. Cadastre os domínios de proteção</CardTitle>
+              <CardDescription>Domínios que você apontou para a VPS (um por linha)</CardDescription>
             </div>
           </div>
         </CardHeader>
-        <CardContent className="p-6">
-          <div className="rounded-xl border border-border/40 overflow-hidden mb-6 -mx-4 md:mx-0 overflow-x-auto">
-            <table className="w-full text-left text-sm border-collapse min-w-[600px] md:min-w-full">
+        <CardContent className="p-6 space-y-4">
+          <textarea
+            value={domainsInput}
+            onChange={(e) => setDomainsInput(e.target.value)}
+            placeholder={"meudominio.com\noutrodominio.com\ncdn3.meudominio.com"}
+            className="w-full h-40 bg-background/50 border border-border/50 rounded-lg p-3 font-mono text-sm focus:ring-1 focus:ring-primary outline-none resize-none"
+          />
+          <Button 
+            onClick={handleProtectDomains}
+            className="w-fit gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-6 h-auto text-base rounded-xl transition-all hover:scale-105 active:scale-95"
+          >
+            Proteger domínios
+          </Button>
+        </CardContent>
+      </Card>
+
+      <Card className="border-border/50 bg-card/50 overflow-hidden">
+        <CardHeader className="border-b border-border/50 pb-4 bg-muted/20">
+          <CardTitle className="text-lg font-bold">Domínios protegidos</CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm border-collapse min-w-[600px]">
               <thead className="bg-muted/30">
-                <tr className="border-b border-border/50 text-[10px] font-bold uppercase text-muted-foreground">
-                  <th className="px-4 py-4">TIPO</th>
-                  <th className="px-4 py-4">NOME</th>
-                  <th className="px-4 py-4">CONTEÚDO</th>
-                  <th className="px-4 py-4 text-right">AÇÕES</th>
+                <tr className="border-b border-border/50 text-[10px] font-bold uppercase text-muted-foreground tracking-wider">
+                  <th className="px-6 py-4">DOMÍNIO PÚBLICO (ENTREGUE AO CLIENTE)</th>
+                  <th className="px-6 py-4">ORIGEM XUI (OCULTA)</th>
+                  <th className="px-6 py-4 text-center">STATUS</th>
+                  <th className="px-6 py-4 text-right">AÇÕES</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/40">
                 {domains.length === 0 ? (
                   <>
-                    <tr className="hover:bg-accent/5 transition-colors">
-                      <td className="px-4 py-4 font-bold text-xs">CNAME</td>
-                      <td className="px-4 py-4 font-mono text-xs">meudominio.com</td>
-                      <td className="px-4 py-4 font-mono text-xs text-primary italic">cdnvoods.vr766.com (Exemplo)</td>
-                      <td className="px-4 py-4 text-right">
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
-                          <Copy className="w-3.5 h-3.5" />
+                    <tr className="hover:bg-accent/5 transition-colors group">
+                      <td className="px-6 py-4 font-medium text-xs">
+                        <div className="flex flex-col">
+                          <span className="text-foreground">http(s)://voods.suafontee.com/get.php?username=...</span>
+                          <span className="text-[10px] text-muted-foreground/60 mt-0.5">&password=...&type=m3u_plus</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 font-mono text-xs">
+                        <div className="flex items-center gap-2">
+                          <span className="px-1.5 py-0.5 rounded bg-muted text-[10px] font-bold border border-border/50">A</span>
+                          <span className="text-muted-foreground">38.190.176.170:80</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] font-bold border border-emerald-500/20">
+                          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                          ATIVO
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <Button variant="destructive" size="sm" className="h-8 px-4 text-[10px] font-bold uppercase rounded-lg">
+                          Remover
                         </Button>
                       </td>
                     </tr>
-                    <tr className="hover:bg-accent/5 transition-colors">
-                      <td className="px-4 py-4 font-bold text-xs">A</td>
-                      <td className="px-4 py-4 font-mono text-xs">meudominio.com</td>
-                      <td className="px-4 py-4 font-mono text-xs text-primary italic">45.140.192.237 (Exemplo)</td>
-                      <td className="px-4 py-4 text-right">
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
-                          <Copy className="w-3.5 h-3.5" />
+                    <tr className="hover:bg-accent/5 transition-colors group">
+                      <td className="px-6 py-4 font-medium text-xs">
+                        <div className="flex flex-col">
+                          <span className="text-foreground">http(s)://dafonte.uk/get.php?username=...</span>
+                          <span className="text-[10px] text-muted-foreground/60 mt-0.5">&password=...&type=m3u_plus</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 font-mono text-xs">
+                        <div className="flex items-center gap-2">
+                          <span className="px-1.5 py-0.5 rounded bg-muted text-[10px] font-bold border border-border/50">A</span>
+                          <span className="text-muted-foreground">38.190.176.170:80</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] font-bold border border-emerald-500/20">
+                          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                          ATIVO
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <Button variant="destructive" size="sm" className="h-8 px-4 text-[10px] font-bold uppercase rounded-lg">
+                          Remover
                         </Button>
                       </td>
                     </tr>
                   </>
                 ) : (
                   domains.map((domain: any) => (
-                    <tr key={domain.id} className="hover:bg-accent/5 transition-colors">
-                      <td className="px-4 py-4 font-bold text-xs uppercase">{domain.type}</td>
-                      <td className="px-4 py-4 font-mono text-xs">{domain.domain_name}</td>
-                      <td className="px-4 py-4 font-mono text-xs text-primary">{domain.content}</td>
-                      <td className="px-4 py-4 text-right">
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
-                          <Copy className="w-3.5 h-3.5" />
+                    <tr key={domain.id} className="hover:bg-accent/5 transition-colors group">
+                      <td className="px-6 py-4 font-medium text-xs">
+                        <div className="flex flex-col">
+                          <span className="text-foreground">http(s)://{domain.domain_name}/get.php?username=...</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 font-mono text-xs">
+                        <div className="flex items-center gap-2">
+                          <span className="px-1.5 py-0.5 rounded bg-muted text-[10px] font-bold border border-border/50 uppercase">{domain.type}</span>
+                          <span className="text-muted-foreground">{domain.content}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] font-bold border border-emerald-500/20">
+                          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                          ATIVO
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <Button variant="destructive" size="sm" className="h-8 px-4 text-[10px] font-bold uppercase rounded-lg">
+                          Remover
                         </Button>
                       </td>
                     </tr>
@@ -190,19 +265,9 @@ export function DomainsTab() {
               </tbody>
             </table>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Button className="gap-2 shadow-lg shadow-primary/20">
-              <Plus className="w-4 h-4" />
-              Cadastrar Novo Domínio
-            </Button>
-            <Button variant="outline" className="gap-2">
-              <RefreshCw className="w-4 h-4" />
-              Sincronizar DNS
-            </Button>
-          </div>
         </CardContent>
       </Card>
+
 
       <div className="p-6 rounded-2xl bg-amber-500/5 border border-amber-500/10 space-y-3">
         <div className="flex items-center gap-2 text-amber-500">
