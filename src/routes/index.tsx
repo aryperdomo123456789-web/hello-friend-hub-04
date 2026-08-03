@@ -47,20 +47,12 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const { data: stats } = useSuspenseQuery({
-    queryKey: ["dashboard-stats"],
-    queryFn: () => getDashboardStats(),
-  });
-
-  const { data: sources } = useSuspenseQuery({
-    queryKey: ["sources"],
-    queryFn: () => getSources(),
-  });
-
-  const { data: muscles } = useSuspenseQuery({
-    queryKey: ["muscles"],
-    queryFn: () => getMuscles(),
-  });
+function Index() {
+  const { data: stats } = useSuspenseQuery({ queryKey: ["dashboard-stats"], queryFn: () => getDashboardStats() });
+  const { data: sources } = useSuspenseQuery({ queryKey: ["sources"], queryFn: () => getSources() });
+  const { data: muscles } = useSuspenseQuery({ queryKey: ["muscles"], queryFn: () => getMuscles() });
+  const { data: live } = useSuspenseQuery({ queryKey: ["live"], queryFn: () => getLiveConnections() });
+  const { data: health } = useSuspenseQuery({ queryKey: ["health"], queryFn: () => getHostHealth() });
 
   return (
     <div className="min-h-screen bg-background text-foreground p-4 md:p-8 font-sans transition-colors duration-300">
@@ -88,40 +80,15 @@ function Index() {
           </div>
         </header>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Total de Origens (XUI)</CardTitle>
-              <Database className="w-4 h-4 text-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.sources}</div>
-              <p className="text-xs text-muted-foreground mt-1">Conectadas ao painel central</p>
-            </CardContent>
-          </Card>
-          
-          <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Músculos (LBs)</CardTitle>
-              <Server className="w-4 h-4 text-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.muscles}</div>
-              <p className="text-xs text-muted-foreground mt-1">VPS distribuindo tráfego</p>
-            </CardContent>
-          </Card>
-
-          <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Status Global</CardTitle>
-              <Activity className="w-4 h-4 text-green-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.onlineMuscles} Online</div>
-              <p className="text-xs text-muted-foreground mt-1">Dos {stats.muscles} músculos cadastrados</p>
-            </CardContent>
-          </Card>
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+          <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Conexões</p><div className="text-xl font-bold">{stats.liveConnections}</div></CardContent></Card>
+          <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Transmitindo</p><div className="text-xl font-bold">{stats.streamingCount}</div></CardContent></Card>
+          <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Canais</p><div className="text-xl font-bold">{stats.channelsCount}</div></CardContent></Card>
+          <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Filmes</p><div className="text-xl font-bold">{stats.moviesCount}</div></CardContent></Card>
+          <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Séries</p><div className="text-xl font-bold">{stats.seriesCount}</div></CardContent></Card>
+          <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Assinantes</p><div className="text-xl font-bold">{stats.liveConnections}</div></CardContent></Card>
+          <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">IPs</p><div className="text-xl font-bold">{stats.distinctIps}</div></CardContent></Card>
+          <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Slots</p><div className="text-xl font-bold">{stats.slotsSold}</div></CardContent></Card>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
