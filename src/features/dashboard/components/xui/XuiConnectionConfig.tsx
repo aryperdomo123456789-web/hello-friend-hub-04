@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Database, RefreshCw, Copy, Loader2 } from "lucide-react";
+import { Database, RefreshCw, Copy, Loader2, CheckCircle2, XCircle } from "lucide-react";
 import { testXuiConnection, saveSourceConfig, getSources } from "@/lib/dashboard.functions";
 import { toast } from "sonner";
 
@@ -18,6 +18,7 @@ export function XuiConnectionConfig() {
   });
   const [isTesting, setIsTesting] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
 
   useEffect(() => {
     async function loadConfig() {
@@ -46,15 +47,19 @@ export function XuiConnectionConfig() {
 
   const handleTest = async () => {
     setIsTesting(true);
+    setTestResult(null);
     try {
       const result = await testXuiConnection({ data: config });
+      setTestResult(result);
       if (result.success) {
         toast.success(result.message);
       } else {
         toast.error(result.message);
       }
     } catch (error: any) {
-      toast.error(error.message || "Erro ao tentar conectar com o banco de dados.");
+      const msg = error.message || "Erro ao tentar conectar com o banco de dados.";
+      setTestResult({ success: false, message: msg });
+      toast.error(msg);
     } finally {
       setIsTesting(false);
     }
@@ -133,23 +138,33 @@ export function XuiConnectionConfig() {
                 </Button>
               </div>
             </div>
-            <div className="flex items-end gap-3 pt-4">
-              <Button 
-                onClick={handleTest} 
-                disabled={isTesting}
-                className="flex-1 gap-2 shadow-lg shadow-primary/20 bg-green-600 hover:bg-green-700"
-              >
-                {isTesting ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
-                Testar Conexão
-              </Button>
-              <Button 
-                onClick={handleSave}
-                disabled={isSaving}
-                className="flex-1 gap-2 shadow-lg shadow-primary/20"
-              >
-                {isSaving && <Loader2 className="w-4 h-4 animate-spin" />}
-                Salvar Configurações
-              </Button>
+            <div className="flex flex-col gap-3 pt-4">
+              <div className="flex items-center gap-3">
+                <Button 
+                  onClick={handleTest} 
+                  disabled={isTesting}
+                  className={`flex-1 gap-2 shadow-lg ${isTesting ? 'opacity-70' : ''} ${testResult?.success ? 'bg-green-600 hover:bg-green-700' : testResult?.success === false ? 'bg-destructive hover:bg-destructive/90' : 'bg-primary'}`}
+                >
+                  {isTesting ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+                  {isTesting ? "Testando..." : "Testar Conexão"}
+                </Button>
+                <Button 
+                  onClick={handleSave}
+                  disabled={isSaving}
+                  variant="outline"
+                  className="flex-1 gap-2 border-primary/20 hover:bg-primary/5"
+                >
+                  {isSaving && <Loader2 className="w-4 h-4 animate-spin" />}
+                  Salvar Configurações
+                </Button>
+              </div>
+
+              {testResult && (
+                <div className={`flex items-start gap-2 p-3 rounded-lg border ${testResult.success ? 'bg-green-500/10 border-green-500/20 text-green-600' : 'bg-destructive/10 border-destructive/20 text-destructive'}`}>
+                  {testResult.success ? <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0" /> : <XCircle className="w-4 h-4 mt-0.5 shrink-0" />}
+                  <span className="text-xs font-medium leading-relaxed">{testResult.message}</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
