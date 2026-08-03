@@ -156,9 +156,9 @@ function Index() {
               <StatCard label="Canais" value={stats.channelsCount} />
               <StatCard label="Filmes" value={stats.moviesCount} />
               <StatCard label="Séries" value={stats.seriesCount} />
-              <StatCard label="Assinantes" value={stats.liveConnections} />
-              <StatCard label="IPs" value={stats.distinctIps} />
-              <StatCard label="Slots" value={stats.slotsSold} />
+              <StatCard label="Assinantes Online" value={stats.liveConnections} />
+              <StatCard label="Ips Distintos" value={stats.distinctIps} />
+              <StatCard label="Slots Vendidos" value={stats.slotsSold} />
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
