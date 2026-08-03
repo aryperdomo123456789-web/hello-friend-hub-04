@@ -151,19 +151,33 @@ export const saveSourceConfig = createServerFn({ method: "POST" })
 export const testXuiConnection = createServerFn({ method: "POST" })
   .inputValidator((data: any) => data)
   .handler(async ({ data }) => {
+    console.log("Iniciando teste de conexão XUI para:", data.ip);
     try {
       const { getXuiDb } = await import("./xui-db.server");
       const db = await getXuiDb(data);
-      // Usando query simples com timeout para evitar travamentos no Edge
-      await Promise.race([
-        db.query("SELECT 1"),
-        new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout de conexão")), 10000))
+      
+      // Teste de query simples
+      const [result]: any = await Promise.race([
+        db.query("SELECT 1 as connected"),
+        new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout de conexão (15s)")), 15000))
       ]);
+      
       await db.end();
-      return { success: true, message: "Conexão com o banco de dados XUI estabelecida com sucesso!" };
+      
+      if (result && result[0] && result[0].connected === 1) {
+        return { success: true, message: "Conexão com o banco de dados XUI estabelecida com sucesso!" };
+      }
+      
+      return { success: false, message: "O banco de dados respondeu mas o teste de query falhou." };
     } catch (error: any) {
-      console.error("Erro ao testar conexão XUI:", error);
-      return { success: false, message: `Erro de conexão: ${error.message}` };
+      console.error("Erro fatal ao testar conexão XUI:", error);
+      // Extrair mensagem de erro amigável
+      let errorMsg = error.message;
+      if (errorMsg.includes("ETIMEDOUT")) errorMsg = "Tempo de conexão esgotado (Firewall bloqueando?).";
+      if (errorMsg.includes("ECONNREFUSED")) errorMsg = "Conexão recusada (IP ou Porta errados?).";
+      if (errorMsg.includes("ER_ACCESS_DENIED_ERROR")) errorMsg = "Acesso negado (Usuário ou Senha errados).";
+      
+      return { success: false, message: `Falha na conexão: ${errorMsg}` };
     }
   });
 
