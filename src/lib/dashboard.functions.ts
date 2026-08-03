@@ -116,18 +116,32 @@ export const saveSourceConfig = createServerFn({ method: "POST" })
     const { data: existing } = await supabaseAdmin
       .from("sources")
       .select("id")
-      .eq("ip", "38.190.176.170")
+      .eq("ip", data.ip)
       .single();
+
+    const payload = {
+      ip: data.ip,
+      db_port: parseInt(data.port),
+      db_name: data.database,
+      db_user: data.user,
+      db_password: data.password,
+      api_url: data.apiUrl,
+      api_token: data.apiToken,
+      updated_at: new Date().toISOString()
+    };
 
     if (existing) {
       await supabaseAdmin
         .from("sources")
-        .update({
-          ip: data.ip,
-          db_port: parseInt(data.port),
-          api_url: data.apiUrl
-        })
+        .update(payload)
         .eq("id", existing.id);
+    } else {
+      await supabaseAdmin
+        .from("sources")
+        .insert({
+          ...payload,
+          name: "Fonte XUI"
+        });
     }
     return { success: true };
   });
@@ -151,8 +165,23 @@ export const testXuiConnection = createServerFn({ method: "POST" })
 export const getXuiUsers = createServerFn({ method: "GET" })
   .handler(async () => {
     try {
+      const { data: source } = await supabaseAdmin
+        .from("sources")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .single();
+
+      if (!source) throw new Error("Configuração da fonte XUI não encontrada.");
+
       const { getXuiDb } = await import("./xui-db.server");
-      const db = await getXuiDb({});
+      const db = await getXuiDb({
+        ip: source.ip,
+        port: source.db_port,
+        user: source.db_user,
+        password: source.db_password,
+        database: source.db_name
+      });
       
       const [rows]: any = await db.query(`
         SELECT 
@@ -165,7 +194,8 @@ export const getXuiUsers = createServerFn({ method: "GET" })
           UNIX_TIMESTAMP(created_at) as created_at, 
           exp_date 
         FROM lines 
-        LIMIT 100
+        ORDER BY created_at DESC
+        LIMIT 500
       `);
       await db.end();
 
@@ -181,6 +211,7 @@ export const getXuiUsers = createServerFn({ method: "GET" })
       }));
     } catch (error) {
       console.error("Error fetching real XUI users:", error);
+      // Fallback for UI if DB is not connected yet or fails
       return [
         { id: 1, username: "SUPERVODS##2026", admin_enabled: true, enabled: true, max_connections: 1, active_connections: 0, created_at: 1720000000, exp_date: null },
       ];
