@@ -26,9 +26,10 @@ export default defineConfig({
       'global': 'globalThis',
     },
     ssr: {
-      // Forçamos o bundling de mysql2 para garantir que os aliases e defines sejam aplicados
-      // e para evitar dependência do ambiente node do Cloudflare caso ele esteja inconsistente
-      noExternal: ['mysql2', 'process', 'stream-browserify', 'buffer', 'util', '@supabase/supabase-js'],
+      // Deixamos o mysql2 como externo para que o nodejs_compat do Cloudflare o gerencie.
+      // O erro 'sql-escaper' ocorre quando o Vite tenta fazer bundle do mysql2 de forma incompleta.
+      external: ['mysql2', 'sql-escaper'],
+      noExternal: ['process', 'stream-browserify', 'buffer', 'util', '@supabase/supabase-js'],
     },
   },
 });
