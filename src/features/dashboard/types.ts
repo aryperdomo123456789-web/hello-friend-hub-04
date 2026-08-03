@@ -52,6 +52,19 @@ export interface LiveConnection {
   server_id?: string | null;
 }
 
+export interface XuiUser {
+  id: number;
+  username: string;
+  password?: string;
+  exp_date?: number | null;
+  admin_enabled: boolean;
+  enabled: boolean;
+  max_connections: number;
+  active_connections: number;
+  created_at: number;
+  last_login?: number | null;
+}
+
 
 export interface HostHealth {
   id: string;

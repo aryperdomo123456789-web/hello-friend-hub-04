@@ -129,3 +129,28 @@ export const saveSourceConfig = createServerFn({ method: "POST" })
     }
     return { success: true };
   });
+
+export const getXuiUsers = createServerFn({ method: "GET" })
+  .handler(async () => {
+    // In a real scenario, this would fetch from the configured XUI database
+    // For now, returning mock data that mimics the XUI structure
+    return [
+      { id: 1, username: "SUPERVODS##2026", admin_enabled: true, enabled: true, max_connections: 1, active_connections: 0, created_at: Date.now() / 1000 },
+      { id: 2, username: "teste_cliente", admin_enabled: false, enabled: true, max_connections: 1, active_connections: 1, created_at: Date.now() / 1000 - 86400, exp_date: Date.now() / 1000 + 2592000 },
+      { id: 3, username: "vendedor_01", admin_enabled: false, enabled: true, max_connections: 50, active_connections: 12, created_at: Date.now() / 1000 - 604800 },
+    ];
+  });
+
+export const deleteXuiUser = createServerFn({ method: "POST" })
+  .inputValidator((data: { id: number }) => data)
+  .handler(async ({ data }) => {
+    console.log("Deletando usuário XUI:", data.id);
+    return { success: true };
+  });
+
+export const toggleXuiUserStatus = createServerFn({ method: "POST" })
+  .inputValidator((data: { id: number; enabled: boolean }) => data)
+  .handler(async ({ data }) => {
+    console.log("Alternando status usuário XUI:", data.id, data.enabled);
+    return { success: true };
+  });
