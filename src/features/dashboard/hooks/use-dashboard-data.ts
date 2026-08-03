@@ -4,7 +4,8 @@ import {
   getSources, 
   getMuscles, 
   getLiveConnections, 
-  getHostHealth 
+  getHostHealth,
+  getProtectedDomains
 } from "@/lib/dashboard.functions";
 
 export function useDashboardData() {

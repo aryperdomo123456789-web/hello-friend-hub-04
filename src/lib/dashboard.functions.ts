@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { ProtectedDomain } from "@/features/dashboard/types";
 
 export const getDashboardStats = createServerFn({ method: "GET" })
   .handler(async () => {
@@ -96,4 +97,35 @@ export const getHostHealth = createServerFn({ method: "GET" })
       .select("*")
       .order("last_seen", { ascending: false });
     return data || [];
+  });
+
+export const getProtectedDomains = createServerFn({ method: "GET" })
+  .handler(async () => {
+    const { data } = await supabaseAdmin
+      .from("protected_domains")
+      .select("*")
+      .order("created_at", { ascending: false });
+    return (data as ProtectedDomain[]) || [];
+  });
+
+export const saveSourceConfig = createServerFn({ method: "POST" })
+  .inputValidator((data: any) => data)
+  .handler(async ({ data }) => {
+    const { data: existing } = await supabaseAdmin
+      .from("sources")
+      .select("id")
+      .eq("ip", "38.190.176.170")
+      .single();
+
+    if (existing) {
+      await supabaseAdmin
+        .from("sources")
+        .update({
+          ip: data.ip,
+          db_port: parseInt(data.port),
+          api_url: data.apiUrl
+        })
+        .eq("id", existing.id);
+    }
+    return { success: true };
   });
