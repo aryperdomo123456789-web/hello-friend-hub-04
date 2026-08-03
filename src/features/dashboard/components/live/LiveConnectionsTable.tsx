@@ -39,30 +39,44 @@ export function LiveConnectionsTable({ connections }: LiveConnectionsTableProps)
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.4)]" />
-                    <span className="text-[10px] font-bold text-green-500 uppercase">Live</span>
+                    <span className="text-[10px] font-bold text-green-500 uppercase">transmitindo</span>
                   </div>
                 </td>
                 <td className="px-4 py-3">
                   <div className="font-bold text-sm text-foreground">{conn.username}</div>
+                  <div className="text-[10px] text-muted-foreground">dafonte.uk</div>
                 </td>
                 <td className="px-4 py-3">
-                  <div className="text-xs font-medium max-w-[150px] truncate">{conn.stream_id}</div>
-                </td>
-                <td className="px-4 py-3">
-                  <div className="text-[11px] font-mono text-muted-foreground">{conn.ip_address}</div>
-                </td>
-                <td className="px-4 py-3">
-                  <div className="text-[11px] truncate max-w-[100px] text-muted-foreground">{conn.user_agent || '-'}</div>
-                </td>
-                <td className="px-4 py-3">
-                  <Badge variant="outline" className="text-[10px] bg-card border-border/50 font-bold">
-                    {conn.muscles?.name || 'main'}
+                  <Badge variant="outline" className="text-[10px] bg-blue-500/10 text-blue-500 border-blue-500/20 font-bold h-5">
+                    filme
                   </Badge>
                 </td>
                 <td className="px-4 py-3">
-                  <Badge variant="outline" className="text-[10px] bg-green-500/10 text-green-500 border-green-500/20 font-bold">
-                    fetching
+                  <div className="text-xs font-bold truncate max-w-[200px]">{conn.stream_id}</div>
+                  <div className="text-[10px] text-muted-foreground">mp4 · #808908</div>
+                </td>
+                <td className="px-4 py-3">
+                  <div className="text-[11px] font-mono font-bold text-muted-foreground">{conn.ip_address}</div>
+                </td>
+                <td className="px-4 py-3">
+                  <div className="text-[11px] truncate max-w-[120px] text-muted-foreground font-medium">{conn.user_agent || 'ExoPlayer'}</div>
+                </td>
+                <td className="px-4 py-3">
+                  <div className="text-[11px] text-muted-foreground font-medium">47m 27s</div>
+                </td>
+                <td className="px-4 py-3">
+                  <div className="flex flex-col">
+                    <span className="text-[10px] font-bold text-muted-foreground">direct source</span>
+                    <span className="text-[10px] text-muted-foreground/70">208.115.235.100</span>
+                  </div>
+                </td>
+                <td className="px-4 py-3">
+                  <Badge variant="outline" className="text-[10px] bg-card border-border/50 font-bold px-2 py-0 h-5">
+                    {conn.muscles?.name || 'LB-01'}
                   </Badge>
+                </td>
+                <td className="px-4 py-3">
+                  <div className="text-[10px] font-bold text-muted-foreground">14s</div>
                 </td>
                 <td className="px-4 py-3 text-right">
                   <Button variant="ghost" size="icon" className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity">
