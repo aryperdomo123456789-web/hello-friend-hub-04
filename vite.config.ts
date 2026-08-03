@@ -26,9 +26,8 @@ export default defineConfig({
       'global': 'globalThis',
     },
     ssr: {
-      // Forçamos o bundling de mysql2 para garantir que os aliases e defines sejam aplicados
-      // e para evitar dependência do ambiente node do Cloudflare caso ele esteja inconsistente
-      noExternal: ['mysql2', 'process', 'stream-browserify', 'buffer', 'util', '@supabase/supabase-js'],
+      // Usamos noExternal para tudo relacionado a mysql e polyfills para garantir bundling consistente
+      noExternal: ['mysql2', 'sql-escaper', 'process', 'stream-browserify', 'buffer', 'util', '@supabase/supabase-js'],
     },
   },
 });
