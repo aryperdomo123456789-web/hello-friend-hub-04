@@ -133,8 +133,8 @@ export function DomainsTab() {
               <Globe className="w-5 h-5" />
             </div>
             <div>
-              <CardTitle className="text-lg font-bold">2. Aponte seus domínios na Cloudflare (nuvem cinza / DNS only)</CardTitle>
-              <CardDescription>Configure os domínios de proteção para o seu sistema.</CardDescription>
+              <CardTitle className="text-lg font-bold">2. Aponte seus domínios na Cloudflare SEMPRE PARA O MAIN</CardTitle>
+              <CardDescription>O IP/domínio da origem XUI nunca é publicado. Configure os domínios de proteção apontando para o Cérebro.</CardDescription>
             </div>
           </div>
         </CardHeader>
@@ -210,7 +210,7 @@ export function DomainsTab() {
           <h3 className="font-bold text-sm uppercase tracking-wider">Atenção ao DNS</h3>
         </div>
         <p className="text-[12px] text-muted-foreground leading-relaxed">
-          Este painel protege um XUI. Cadastre a origem uma única vez; todos os domínios de proteção usam ela. Este dado fica apenas no banco local, nunca vira DNS público e nunca aparece em playlist, player_api ou EPG.
+          O domínio público do cliente aponta SEMPRE PARA O MAIN DO SISTEMA. A origem XUI fica oculta no banco de dados, protegendo contra vazamentos. Playlists e APIs são reescritas e entregues pelo domínio público protegido.
         </p>
       </div>
     </div>

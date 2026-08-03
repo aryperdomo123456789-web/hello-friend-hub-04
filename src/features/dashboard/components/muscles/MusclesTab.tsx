@@ -83,7 +83,7 @@ export function MusclesTab({ muscles }: MusclesTabProps) {
         <Card className="border-border/50 bg-card/50 overflow-hidden">
           <CardHeader className="border-b border-border/50 pb-4">
             <CardTitle className="text-lg font-bold">Painel simples do LB</CardTitle>
-            <p className="text-xs text-muted-foreground">Fluxo que importa aqui: cadastrar o LB, instalar, acompanhar a saúde e escolher se o tráfego fica no main ou vai para o LB.</p>
+            <p className="text-xs text-muted-foreground">O Cérebro (Main) centraliza a gestão, valida tokens e repassa o tráfego para os Músculos (LBs) que executam a entrega fluida.</p>
           </CardHeader>
           <CardContent className="p-6">
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6">

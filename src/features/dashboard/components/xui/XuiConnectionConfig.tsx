@@ -92,7 +92,7 @@ export function XuiConnectionConfig() {
           </div>
           <div>
             <CardTitle className="text-lg font-bold">1. Conexão do XUI</CardTitle>
-            <CardDescription>Configure a comunicação direta com o seu painel de origem.</CardDescription>
+            <CardDescription>Defina a origem XUI protegida. O Main ocultará este IP de todas as respostas públicas.</CardDescription>
           </div>
         </div>
       </CardHeader>
