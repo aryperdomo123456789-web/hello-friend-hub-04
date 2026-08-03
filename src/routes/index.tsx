@@ -15,7 +15,8 @@ import {
   Monitor, 
   RefreshCw,
   Search,
-  Globe
+  Globe,
+  Users
 } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -35,6 +36,7 @@ import { XuiConnectionConfig } from "@/features/dashboard/components/xui/XuiConn
 import { XuiOperations } from "@/features/dashboard/components/xui/XuiOperations";
 import { DomainsTab } from "@/features/dashboard/components/domains/DomainsTab";
 import { MusclesTab } from "@/features/dashboard/components/muscles/MusclesTab";
+import { UsersTab } from "@/features/dashboard/components/users/UsersTab";
 
 
 export const Route = createFileRoute("/")({
@@ -112,6 +114,11 @@ function Index() {
               <Monitor className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               <span className="hidden xs:inline">Gerência XUI</span>
               <span className="xs:hidden">XUI</span>
+            </TabsTrigger>
+            <TabsTrigger value="users" className="gap-2 px-3 sm:px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-nowrap text-xs sm:text-sm">
+              <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span className="hidden xs:inline">Usuários XUI</span>
+              <span className="xs:hidden">Usuários</span>
             </TabsTrigger>
             <TabsTrigger value="domains" className="gap-2 px-3 sm:px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-nowrap text-xs sm:text-sm">
               <Globe className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -223,6 +230,10 @@ function Index() {
             </div>
             <XuiConnectionConfig />
             <XuiOperations muscleCount={muscles.length} />
+          </TabsContent>
+
+          <TabsContent value="users" className="space-y-8 mt-0 outline-none">
+            <UsersTab />
           </TabsContent>
           
           <TabsContent value="domains" className="space-y-8 mt-0 outline-none">
