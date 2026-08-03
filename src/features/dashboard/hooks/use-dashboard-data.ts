@@ -34,18 +34,25 @@ export function useDashboardData() {
     queryFn: () => getHostHealth() 
   });
 
+  const domainsQuery = useSuspenseQuery({
+    queryKey: ["protected-domains"],
+    queryFn: () => getProtectedDomains(),
+  });
+
   return {
     stats: statsQuery.data,
     sources: sourcesQuery.data,
     muscles: musclesQuery.data,
     liveConnections: liveQuery.data,
     health: healthQuery.data,
+    domains: domainsQuery.data,
     refetchAll: () => {
       statsQuery.refetch();
       sourcesQuery.refetch();
       musclesQuery.refetch();
       liveQuery.refetch();
       healthQuery.refetch();
+      domainsQuery.refetch();
     }
   };
 }

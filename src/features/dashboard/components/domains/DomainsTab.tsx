@@ -140,7 +140,7 @@ export function DomainsTab() {
                     </tr>
                   </>
                 ) : (
-                  domains.map((domain) => (
+                  domains.map((domain: any) => (
                     <tr key={domain.id} className="hover:bg-accent/5 transition-colors">
                       <td className="px-4 py-4 font-bold text-xs uppercase">{domain.type}</td>
                       <td className="px-4 py-4 font-mono text-xs">{domain.domain_name}</td>
