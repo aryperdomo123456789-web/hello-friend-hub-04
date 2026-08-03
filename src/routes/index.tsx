@@ -12,10 +12,10 @@ function Index() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center p-8 bg-[#fcfbf8] text-foreground font-sans leading-relaxed">
       <div className="max-w-2xl space-y-6 text-center">
-        <h1 className="text-2xl font-bold tracking-tight">CDN Voods Assets Backup</h1>
+        <h1 className="text-2xl font-bold tracking-tight">me responda</h1>
         <p className="whitespace-pre-line text-lg">
-          https://github.com/aryperdomo123456789-web/cdnvoods-assets/tree/backup
-          {"\n"}este projeto tu consegue trazer ele aqui pra lovable faver ele aqui
+          {"\n"}https://github.com/aryperdomo123456789-web/cdnvoods-assets/tree/backup
+          {"\n"}este projeto que esta ai nesse github  tu consegue trazer ele aqui pra lovable fazer ele aqui
           {"\n"}com a linguegem aqui mudar pra linguagem daqui 
           {"\n"}e eu poder instalar vps como loudbalancer ??
           {"\n"}onde main cerebro e vps de musculo ??
