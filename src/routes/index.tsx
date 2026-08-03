@@ -312,8 +312,8 @@ function Index() {
         </div>
       </TabsContent>
 
+      <TabsContent value="domains" className="space-y-8 mt-0 outline-none">
 
-          <TabsContent value="domains" className="space-y-8 mt-0 outline-none">
             <Card className="border-border/50 bg-card/50 overflow-hidden">
               <CardHeader className="border-b border-border/50 pb-4 bg-muted/20">
                 <div className="flex items-center gap-3">
