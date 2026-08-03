@@ -1,15 +1,10 @@
 import mysql from 'mysql2/promise';
-import process from 'process';
-
-// Garantir que process esteja disponível no escopo global para o mysql2
-if (typeof globalThis !== 'undefined' && !globalThis.process) {
-  (globalThis as any).process = process;
-}
 
 /**
  * Nota sobre compatibilidade Edge:
- * O erro "No such module node:process" ocorre porque o driver mysql2 
- * depende de globais do Node.js. No Cloudflare Workers, usamos polyfills.
+ * O erro "No such module node:process" geralmente ocorre quando o driver mysql2 
+ * tenta acessar globais do Node em ambientes como Cloudflare Workers.
+ * Estamos usando a versão JS-only do driver para maior compatibilidade.
  */
 
 export async function getXuiDb(config: any) {
