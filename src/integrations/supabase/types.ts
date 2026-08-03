@@ -14,6 +14,80 @@ export type Database = {
   }
   public: {
     Tables: {
+      host_health: {
+        Row: {
+          fail_rate: number | null
+          hops: number | null
+          host: string
+          id: string
+          last_seen: string | null
+          verdict: string
+        }
+        Insert: {
+          fail_rate?: number | null
+          hops?: number | null
+          host: string
+          id?: string
+          last_seen?: string | null
+          verdict: string
+        }
+        Update: {
+          fail_rate?: number | null
+          hops?: number | null
+          host?: string
+          id?: string
+          last_seen?: string | null
+          verdict?: string
+        }
+        Relationships: []
+      }
+      live_connections: {
+        Row: {
+          bytes_sent: number | null
+          id: string
+          ip_address: string
+          last_activity_at: string | null
+          server_id: string | null
+          started_at: string | null
+          stream_id: number
+          stream_type: string
+          user_agent: string | null
+          username: string
+        }
+        Insert: {
+          bytes_sent?: number | null
+          id?: string
+          ip_address: string
+          last_activity_at?: string | null
+          server_id?: string | null
+          started_at?: string | null
+          stream_id: number
+          stream_type: string
+          user_agent?: string | null
+          username: string
+        }
+        Update: {
+          bytes_sent?: number | null
+          id?: string
+          ip_address?: string
+          last_activity_at?: string | null
+          server_id?: string | null
+          started_at?: string | null
+          stream_id?: number
+          stream_type?: string
+          user_agent?: string | null
+          username?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "live_connections_server_id_fkey"
+            columns: ["server_id"]
+            isOneToOne: false
+            referencedRelation: "muscles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       muscles: {
         Row: {
           created_at: string | null
