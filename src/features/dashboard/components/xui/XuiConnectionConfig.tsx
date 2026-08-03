@@ -45,7 +45,7 @@ export function XuiConnectionConfig() {
               </div>
             </div>
           </div>
-          <div className="space-y-4">
+          <div className="space-y-4 flex flex-col">
             <div className="space-y-2">
               <label className="text-xs font-bold uppercase text-muted-foreground">API URL do XUI</label>
               <Input value="http://38.190.176.170/fejvCHkR" readOnly className="bg-background/50 font-mono text-sm" />
@@ -59,7 +59,7 @@ export function XuiConnectionConfig() {
                 </Button>
               </div>
             </div>
-            <div className="flex items-end gap-3 h-full pb-1">
+            <div className="flex items-end gap-3 pt-4">
               <Button className="flex-1 gap-2 shadow-lg shadow-primary/20 bg-green-600 hover:bg-green-700">
                 <RefreshCw className="w-4 h-4" />
                 Testar Conexão
