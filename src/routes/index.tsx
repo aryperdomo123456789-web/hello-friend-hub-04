@@ -89,16 +89,30 @@ function Index() {
           </div>
         </header>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-          <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Conexões</p><div className="text-xl font-bold">{stats.liveConnections}</div></CardContent></Card>
-          <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Transmitindo</p><div className="text-xl font-bold">{stats.streamingCount}</div></CardContent></Card>
-          <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Canais</p><div className="text-xl font-bold">{stats.channelsCount}</div></CardContent></Card>
-          <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Filmes</p><div className="text-xl font-bold">{stats.moviesCount}</div></CardContent></Card>
-          <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Séries</p><div className="text-xl font-bold">{stats.seriesCount}</div></CardContent></Card>
-          <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Assinantes</p><div className="text-xl font-bold">{stats.liveConnections}</div></CardContent></Card>
-          <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">IPs</p><div className="text-xl font-bold">{stats.distinctIps}</div></CardContent></Card>
-          <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Slots</p><div className="text-xl font-bold">{stats.slotsSold}</div></CardContent></Card>
-        </div>
+        <Tabs defaultValue="live" className="w-full space-y-6">
+          <TabsList className="bg-card/50 border border-border/50 p-1 rounded-xl h-auto">
+            <TabsTrigger value="live" className="gap-2 px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Activity className="w-4 h-4" />
+              Painel Geral
+            </TabsTrigger>
+            <TabsTrigger value="xui" className="gap-2 px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Monitor className="w-4 h-4" />
+              Gerência XUI
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="live" className="space-y-8 mt-0 outline-none">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+              <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Conexões</p><div className="text-xl font-bold">{stats.liveConnections}</div></CardContent></Card>
+              <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Transmitindo</p><div className="text-xl font-bold">{stats.streamingCount}</div></CardContent></Card>
+              <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Canais</p><div className="text-xl font-bold">{stats.channelsCount}</div></CardContent></Card>
+              <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Filmes</p><div className="text-xl font-bold">{stats.moviesCount}</div></CardContent></Card>
+              <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Séries</p><div className="text-xl font-bold">{stats.seriesCount}</div></CardContent></Card>
+              <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Assinantes</p><div className="text-xl font-bold">{stats.liveConnections}</div></CardContent></Card>
+              <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">IPs</p><div className="text-xl font-bold">{stats.distinctIps}</div></CardContent></Card>
+              <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Slots</p><div className="text-xl font-bold">{stats.slotsSold}</div></CardContent></Card>
+            </div>
+
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Real-time Monitoring Section */}
@@ -360,6 +374,145 @@ function Index() {
         </div>
 
 
+          </TabsContent>
+
+          <TabsContent value="xui" className="space-y-8 mt-0 outline-none">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Card className="border-border/50 bg-card/50">
+                <CardContent className="p-4 flex flex-col gap-1">
+                  <p className="text-xs text-muted-foreground uppercase font-bold tracking-wider">Linhas no XUI</p>
+                  <div className="text-2xl font-black">{stats.liveConnections}</div>
+                  <Badge variant="outline" className="w-fit text-[10px] mt-1">Total de contas</Badge>
+                </CardContent>
+              </Card>
+              <Card className="border-border/50 bg-card/50">
+                <CardContent className="p-4 flex flex-col gap-1">
+                  <p className="text-xs text-muted-foreground uppercase font-bold tracking-wider">Linhas Ativas</p>
+                  <div className="text-2xl font-black text-green-500">{stats.streamingCount}</div>
+                  <Badge variant="outline" className="w-fit text-[10px] mt-1 bg-green-500/5 border-green-500/20">Em uso agora</Badge>
+                </CardContent>
+              </Card>
+              <Card className="border-border/50 bg-card/50">
+                <CardContent className="p-4 flex flex-col gap-1">
+                  <p className="text-xs text-muted-foreground uppercase font-bold tracking-wider">Bouquets</p>
+                  <div className="text-2xl font-black">0</div>
+                  <Badge variant="outline" className="w-fit text-[10px] mt-1">Pacotes ativos</Badge>
+                </CardContent>
+              </Card>
+              <Card className="border-border/50 bg-card/50">
+                <CardContent className="p-4 flex flex-col gap-1">
+                  <p className="text-xs text-muted-foreground uppercase font-bold tracking-wider">Banco XUI</p>
+                  <div className="text-2xl font-black text-primary">ON</div>
+                  <Badge variant="outline" className="w-fit text-[10px] mt-1 bg-primary/5 border-primary/20">Sincronizado</Badge>
+                </CardContent>
+              </Card>
+            </div>
+
+            <Card className="border-border/50 bg-card/50 overflow-hidden">
+              <CardHeader className="border-b border-border/50 pb-4 bg-muted/20">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                    <Database className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-lg font-bold">1. Conexão do XUI</CardTitle>
+                    <CardDescription>Configure a comunicação direta com o seu painel de origem.</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase text-muted-foreground">IP/host do banco do XUI</label>
+                      <Input value="38.190.176.170" readOnly className="bg-background/50 font-mono text-sm" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase text-muted-foreground">Porta do banco</label>
+                      <Input value="3306" readOnly className="bg-background/50 font-mono text-sm" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase text-muted-foreground">Nome do banco</label>
+                      <Input value="xui" readOnly className="bg-background/50 font-mono text-sm" />
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase text-muted-foreground">API URL do XUI</label>
+                      <Input value="http://38.190.176.170/fejvCHkR" readOnly className="bg-background/50 font-mono text-sm" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase text-muted-foreground">API token</label>
+                      <div className="relative">
+                        <Input value="EAFD11794F03C3E3BFDA8FAFD6500809" readOnly type="password" className="bg-background/50 font-mono text-sm pr-10" />
+                        <Button variant="ghost" size="icon" className="absolute right-0 top-0 h-full px-3 text-muted-foreground hover:text-foreground">
+                          <Copy className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="flex items-end h-full pb-1">
+                      <Button className="w-full gap-2 shadow-lg shadow-primary/20">
+                        <RefreshCw className="w-4 h-4" />
+                        Testar Conexão
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Card className="md:col-span-2 border-border/50 bg-card/50 overflow-hidden">
+                <CardHeader className="border-b border-border/50 pb-4">
+                  <CardTitle className="text-base font-bold flex items-center gap-2">
+                    <Users className="w-4 h-4 text-primary" />
+                    Operações Rápidas
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <Button variant="outline" className="h-24 flex flex-col gap-2 hover:border-primary/50 hover:bg-primary/5 transition-all">
+                      <Plus className="w-6 h-6 text-primary" />
+                      <div className="flex flex-col text-center">
+                        <span className="font-bold">Criar Usuário</span>
+                        <span className="text-[10px] text-muted-foreground font-normal">Nova conta no XUI</span>
+                      </div>
+                    </Button>
+                    <Button variant="outline" className="h-24 flex flex-col gap-2 hover:border-primary/50 hover:bg-primary/5 transition-all">
+                      <Play className="w-6 h-6 text-primary" />
+                      <div className="flex flex-col text-center">
+                        <span className="font-bold">Escolher Bouquets</span>
+                        <span className="text-[10px] text-muted-foreground font-normal">Gerenciar pacotes</span>
+                      </div>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-border/50 bg-card/50 overflow-hidden">
+                <CardHeader className="border-b border-border/50 pb-4">
+                  <CardTitle className="text-base font-bold flex items-center gap-2">
+                    <Shield className="w-4 h-4 text-primary" />
+                    Segurança
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-6 flex flex-col gap-4">
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-green-500/10 border border-green-500/20">
+                    <div className="flex items-center gap-2">
+                      <ShieldCheck className="w-4 h-4 text-green-500" />
+                      <span className="text-xs font-bold uppercase">Proxy Ativo</span>
+                    </div>
+                    <Badge className="bg-green-500 hover:bg-green-600">OK</Badge>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground leading-relaxed">
+                    Sua origem está sendo protegida por {muscles.length} músculo(s) ativo(s). O IP real não é exposto aos clientes.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+        </Tabs>
+
         {/* Info Box */}
         <div className="p-6 rounded-2xl bg-primary/5 border border-primary/10 space-y-3">
           <div className="flex items-center gap-2 text-primary">
@@ -374,4 +527,5 @@ function Index() {
     </div>
   );
 }
+
 
