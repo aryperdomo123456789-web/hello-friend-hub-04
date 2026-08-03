@@ -18,7 +18,7 @@ export async function getXuiDb(config: any) {
 
   const host = config.ip || '38.190.176.170';
   const user = config.db_user || config.user || 'bancovods';
-  const password = config.db_password || config.password || 'bancovods';
+  const password = config.db_password || config.password || 'vmxfontevoods12@';
   const database = config.db_name || config.database || 'xui';
   const port = parseInt(config.db_port || config.port) || 3306;
 

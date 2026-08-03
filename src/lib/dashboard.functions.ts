@@ -9,8 +9,8 @@ async function getSupabaseAdmin() {
   const SUPABASE_SERVICE_ROLE_KEY = process.env['SUPABASE_SERVICE_ROLE_KEY'];
 
   if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-    console.error("[getSupabaseAdmin] Missing env vars:", { url: !!SUPABASE_URL, key: !!SUPABASE_SERVICE_ROLE_KEY });
-    throw new Error("Missing Supabase environment variable(s). Ensure you are connected to Lovable Cloud and using a server-side environment.");
+    console.error("[getSupabaseAdmin] Variáveis ausentes. URL:", !!SUPABASE_URL, "KEY:", !!SUPABASE_SERVICE_ROLE_KEY);
+    throw new Error("Conecte o Supabase no Lovable Cloud para habilitar a sincronização.");
   }
 
   return createClient<Database>(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
