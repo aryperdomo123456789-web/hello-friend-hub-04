@@ -106,7 +106,7 @@ events {
 EOF
 
 # 5. Reiniciar Serviços
-systemctl restart php\${PHP_VERSION}-fpm
+systemctl restart php${PHP_VERSION}-fpm
 nginx -t && systemctl restart nginx
 
 echo "----------------------------------------------------"
