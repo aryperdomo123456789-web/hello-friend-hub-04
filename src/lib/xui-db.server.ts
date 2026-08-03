@@ -16,24 +16,22 @@ export async function getXuiDb(config: any) {
   const database = config.database || 'xui';
   const port = parseInt(config.port) || 3306;
 
+  console.log(`[MySQL] Tentando conectar em ${host}:${port} (user: ${user}, db: ${database})`);
+
   try {
-    const pool = mysql.createPool({
+    // Usamos createConnection diretamente para testes mais rápidos e isolados
+    const connection = await mysql.createConnection({
       host,
       user,
       password,
       database,
       port,
-      waitForConnections: true,
-      connectionLimit: 1,
-      queueLimit: 0,
       connectTimeout: 15000,
-      // Desabilitamos SSL por padrão para conexões diretas de banco legadas,
-      // a menos que explicitamente configurado.
     });
     
-    return pool;
-  } catch (error) {
-    console.error("Erro ao criar pool MySQL:", error);
-    throw new Error("Não foi possível estabelecer conexão com o banco de dados. Verifique os dados de acesso.");
+    return connection;
+  } catch (error: any) {
+    console.error("[MySQL] Erro ao criar conexão:", error.message);
+    throw error;
   }
 }
