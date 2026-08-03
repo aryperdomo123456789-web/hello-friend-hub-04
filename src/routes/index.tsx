@@ -30,6 +30,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { useDashboardData } from "@/features/dashboard/hooks/use-dashboard-data";
 import { StatCard } from "@/features/dashboard/components/StatCard";
 import { LiveConnectionsTable } from "@/features/dashboard/components/live/LiveConnectionsTable";
+import { SubscriberParkTable } from "@/features/dashboard/components/live/SubscriberParkTable";
 import { SourceList } from "@/features/dashboard/components/live/SourceList";
 import { MuscleList } from "@/features/dashboard/components/muscles/MuscleList";
 import { XuiConnectionConfig } from "@/features/dashboard/components/xui/XuiConnectionConfig";
