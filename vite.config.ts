@@ -21,7 +21,6 @@ export default defineConfig({
       },
     },
     define: {
-      'process.env': '{}',
       'process.version': '"v18.0.0"',
       'process.nextTick': '((fn, ...args) => setTimeout(() => fn(...args), 0))',
       'global': 'globalThis',

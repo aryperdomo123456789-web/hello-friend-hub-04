@@ -12,7 +12,7 @@ export function XuiConnectionConfig() {
     port: "3306",
     database: "xui",
     user: "bancovods",
-    password: "bancovods",
+    password: "vmxfontevoods12@",
     apiUrl: "http://38.190.176.170/fejvCHkR",
     apiToken: "EAFD11794F03C3E3BFDA8FAFD6500809"
   });
