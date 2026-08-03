@@ -19,10 +19,34 @@ echo "----------------------------------------------------"
 echo "  [VOODS] INICIANDO INSTALAÇÃO DO MÚSCULO (LB)      "
 echo "----------------------------------------------------"
 
-# 1. Atualização e Dependências
+# 1. Identificação da Distro e Versão Inteligente
+OS_NAME=$(grep ^ID= /etc/os-release | cut -d= -f2 | tr -d '"')
+OS_VERSION=$(grep ^VERSION_ID= /etc/os-release | cut -d= -f2 | tr -d '"')
+
+echo "[INFO] Sistema Detectado: $OS_NAME $OS_VERSION"
+
+if [ "$OS_NAME" != "ubuntu" ]; then
+    echo "[ERRO] Este script suporta apenas Ubuntu (20.04 a 24.04+)."
+    exit 1
+fi
+
+# 2. Atualização e Dependências (Compatível Ubuntu 20-25)
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
-apt-get install -y nginx curl php\${PHP_VERSION}-fpm php\${PHP_VERSION}-cli php\${PHP_VERSION}-curl php\${PHP_VERSION}-sqlite3 ca-certificates jq
+apt-get install -y nginx curl ca-certificates jq
+
+# Verificar se PHP já existe ou instalar
+if ! command -v php >/dev/null 2>&1; then
+    # No Ubuntu 24.04+ o PHP padrão é 8.3, no 22.04 é 8.1, etc.
+    # Vamos tentar instalar a versão padrão da distro para garantir compatibilidade
+    apt-get install -y php-fpm php-cli php-curl php-sqlite3
+fi
+
+# Detectar versão do PHP para configurar o FPM
+PHP_INSTALLED_VER=$(php -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')
+echo "[INFO] Usando PHP Versão: $PHP_INSTALLED_VER"
+PHP_VERSION=$PHP_INSTALLED_VER
+
 
 # 2. Estrutura de Diretórios
 mkdir -p "$LB_DIR"/{public,storage/logs,storage/cache}
