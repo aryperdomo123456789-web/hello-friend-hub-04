@@ -21,23 +21,28 @@ export interface Muscle {
   id: string;
   name: string;
   ip: string;
-  status: 'online' | 'offline';
-  source_id: string;
-  sources?: { name: string };
-  created_at?: string;
+  status: string | null;
+  source_id: string | null;
+  sources?: { name: string } | null;
+  created_at?: string | null;
+  last_seen?: string | null;
 }
 
 export interface LiveConnection {
   id: string;
   username: string;
   stream_type: string;
-  stream_id: string;
+  stream_id: number;
   ip_address: string;
-  user_agent?: string;
-  muscle_id?: string;
-  muscles?: { id: string; name: string };
-  started_at?: string;
+  user_agent?: string | null;
+  muscle_id?: string | null;
+  muscles?: { id: string; name: string } | null;
+  started_at?: string | null;
+  bytes_sent?: number | null;
+  last_activity_at?: string | null;
+  server_id?: string | null;
 }
+
 
 export interface HostHealth {
   id: string;
