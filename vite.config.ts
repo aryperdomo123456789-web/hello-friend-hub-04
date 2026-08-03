@@ -27,7 +27,9 @@ export default defineConfig({
       'global': 'globalThis',
     },
     ssr: {
-      noExternal: ['mysql2', 'process', 'stream-browserify', 'buffer', 'util'],
+      // Explicitly externalize mysql2 to let workerd's nodejs_compat handle it
+      external: ['mysql2'],
+      noExternal: ['process', 'stream-browserify', 'buffer', 'util'],
     },
   },
 });
