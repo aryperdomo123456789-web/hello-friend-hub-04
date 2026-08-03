@@ -81,9 +81,9 @@ export function MusclesTab({ muscles }: MusclesTabProps) {
       <div className="space-y-6">
         {/* Painel simples do LB */}
         <Card className="border-border/50 bg-card/50 overflow-hidden">
-          <CardHeader className="border-b border-border/50 pb-4">
+          <CardHeader className="border-b border-border/50 pb-4 bg-muted/20">
             <CardTitle className="text-lg font-bold">Painel simples do LB</CardTitle>
-            <p className="text-xs text-muted-foreground">O Cérebro (Main) centraliza a gestão, valida tokens e repassa o tráfego para os Músculos (LBs) que executam a entrega fluida.</p>
+            <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">O Cérebro (Main) centraliza a gestão, valida tokens e repassa o tráfego para os Músculos (LBs)</p>
           </CardHeader>
           <CardContent className="p-6">
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6">
@@ -117,9 +117,16 @@ export function MusclesTab({ muscles }: MusclesTabProps) {
 
         {/* 1. Cadastrar LB */}
         <Card className="border-border/50 bg-card/50 overflow-hidden">
-          <CardHeader className="border-b border-border/50 pb-4">
-            <CardTitle className="text-lg font-bold text-blue-500">1. Cadastrar e Instalar LB (Músculo)</CardTitle>
-            <p className="text-xs text-muted-foreground">Transforme sua VPS limpa em um nó de processamento protegido.</p>
+          <CardHeader className="border-b border-border/50 pb-4 bg-muted/20">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500">
+                <Server className="w-5 h-5" />
+              </div>
+              <div>
+                <CardTitle className="text-lg font-bold">1. Cadastrar e Instalar LB (Músculo)</CardTitle>
+                <p className="text-xs text-muted-foreground">Transforme sua VPS limpa em um nó de processamento protegido.</p>
+              </div>
+            </div>
           </CardHeader>
           <CardContent className="p-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 mb-6">
@@ -223,7 +230,7 @@ export function MusclesTab({ muscles }: MusclesTabProps) {
 
         {/* 2. LBs cadastrados */}
         <Card className="border-border/50 bg-card/50 overflow-hidden">
-          <CardHeader className="border-b border-border/50 pb-4">
+          <CardHeader className="border-b border-border/50 pb-4 bg-muted/20">
             <CardTitle className="text-lg font-bold">2. LBs (Músculos) Ativos</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
@@ -233,8 +240,15 @@ export function MusclesTab({ muscles }: MusclesTabProps) {
 
         {/* 4. Gerenciamento de Tráfego */}
         <Card className="border-border/50 bg-card/50 overflow-hidden">
-          <CardHeader className="border-b border-border/50 pb-4">
-            <CardTitle className="text-lg font-bold">4. Redirecionar Tráfego para o LB</CardTitle>
+          <CardHeader className="border-b border-border/50 pb-4 bg-muted/20">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                <Terminal className="w-5 h-5" />
+              </div>
+              <div>
+                <CardTitle className="text-lg font-bold">4. Redirecionar Tráfego para o LB</CardTitle>
+              </div>
+            </div>
           </CardHeader>
           <CardContent className="p-6 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -246,7 +260,7 @@ export function MusclesTab({ muscles }: MusclesTabProps) {
                 </select>
               </div>
               <div className="space-y-2 md:col-span-1">
-                <label className="text-xs font-bold text-muted-foreground uppercase">Usuário(s)</label>
+                <label className="text-xs font-bold text-muted-foreground uppercase">Usuários que você apontou para a VPS (um por linha)</label>
                 <textarea 
                   className="w-full bg-background/50 border border-border/50 rounded-lg p-3 text-xs h-32 focus:ring-1 focus:ring-primary outline-none"
                   placeholder="digite um usuário por linha ou separados por vírgula"
