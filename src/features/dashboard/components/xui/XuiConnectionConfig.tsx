@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Database, RefreshCw, Copy, Loader2 } from "lucide-react";
-import { testXuiConnection, saveSourceConfig } from "@/lib/dashboard.functions";
+import { testXuiConnection, saveSourceConfig, getSources } from "@/lib/dashboard.functions";
 import { toast } from "sonner";
 
 export function XuiConnectionConfig() {
@@ -16,6 +16,29 @@ export function XuiConnectionConfig() {
     apiUrl: "http://38.190.176.170/fejvCHkR",
     apiToken: "EAFD11794F03C3E3BFDA8FAFD6500809"
   });
+
+  useEffect(() => {
+    async function loadConfig() {
+      try {
+        const sources = await getSources();
+        if (sources && sources.length > 0) {
+          const s = sources[0];
+          setConfig({
+            ip: s.ip || "",
+            port: String(s.db_port || "3306"),
+            database: s.db_name || "xui",
+            user: s.db_user || "",
+            password: s.db_password || "",
+            apiUrl: s.api_url || "",
+            apiToken: s.api_token || ""
+          });
+        }
+      } catch (error) {
+        console.error("Erro ao carregar configurações:", error);
+      }
+    }
+    loadConfig();
+  }, []);
   const [isTesting, setIsTesting] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
