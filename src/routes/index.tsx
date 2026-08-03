@@ -1,9 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getDashboardStats, getSources, getMuscles } from "@/lib/dashboard.functions";
-import { Server, Activity, Database, ShieldCheck, ChevronRight, ArrowUpRight, Moon } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { getLbInstallerScript, addMuscle } from "@/lib/muscles.functions";
+import { Server, Activity, Database, ShieldCheck, ChevronRight, ArrowUpRight, Moon, Plus, Terminal, Copy, Check, Shield } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { toast } from "sonner";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 export const Route = createFileRoute("/")({
@@ -153,9 +166,63 @@ function Index() {
                   <CardTitle>Músculos Ativos</CardTitle>
                   <CardDescription>Load Balancers processando tráfego real.</CardDescription>
                 </div>
-                <Badge variant="secondary" className="cursor-pointer hover:bg-secondary/80">
-                  Instalar VPS
-                </Badge>
+                
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="secondary" size="sm" className="gap-2">
+                      <Plus className="w-4 h-4" />
+                      Instalar VPS
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[600px]">
+                    <DialogHeader>
+                      <DialogTitle>Novo Músculo (Load Balancer)</DialogTitle>
+                      <DialogDescription>
+                        Copie o comando abaixo e execute como root na sua nova VPS.
+                      </DialogDescription>
+                    </DialogHeader>
+                    
+                    <div className="space-y-6 py-4">
+                      <div className="bg-zinc-950 rounded-lg p-4 font-mono text-xs text-zinc-300 relative group border border-zinc-800">
+                        <div className="flex justify-between items-start mb-2 border-b border-zinc-800 pb-2">
+                          <span className="text-zinc-500 italic"># Script de instalação automática</span>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-6 w-6 text-zinc-400 hover:text-white"
+                            onClick={() => {
+                              navigator.clipboard.writeText("curl -sSL https://voods.app/install-lb | bash");
+                              toast.success("Comando copiado!");
+                            }}
+                          >
+                            <Copy className="h-3 w-3" />
+                          </Button>
+                        </div>
+                        <code className="block whitespace-pre-wrap break-all leading-relaxed">
+                          curl -sSL https://voods.app/install-lb | bash
+                        </code>
+                      </div>
+
+                      <div className="space-y-4 pt-2 border-t border-border">
+                        <h4 className="text-sm font-semibold">Após a instalação, registre a VPS:</h4>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <label className="text-xs font-medium uppercase text-muted-foreground">Nome do Músculo</label>
+                            <Input placeholder="Ex: LB-SaoPaulo-01" className="h-9" />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-xs font-medium uppercase text-muted-foreground">IP da VPS</label>
+                            <Input placeholder="0.0.0.0" className="h-9" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <DialogFooter>
+                      <Button className="w-full sm:w-auto">Concluir Registro</Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
               </div>
             </CardHeader>
             <CardContent>
@@ -167,17 +234,23 @@ function Index() {
                   </div>
                 ) : (
                   muscles.map((muscle: any) => (
-                    <div key={muscle.id} className="flex items-center justify-between p-4 rounded-lg bg-accent/30 border border-border/40">
+                    <div key={muscle.id} className="flex items-center justify-between p-4 rounded-lg bg-accent/30 border border-border/40 hover:border-primary/30 transition-all group">
                       <div className="flex items-center gap-4">
-                        <div className={`w-2 h-2 rounded-full ${muscle.status === 'online' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]' : 'bg-gray-400'}`} />
+                        <div className={`w-3 h-3 rounded-full ${muscle.status === 'online' ? 'bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.4)]' : 'bg-gray-400'}`} />
                         <div>
-                          <h4 className="font-semibold text-sm">{muscle.name}</h4>
-                          <p className="text-xs text-muted-foreground">{muscle.ip} • via {muscle.sources?.name || 'Indefinido'}</p>
+                          <div className="flex items-center gap-2">
+                            <h4 className="font-semibold text-sm">{muscle.name}</h4>
+                            <Shield className="w-3 h-3 text-primary/60" />
+                          </div>
+                          <p className="text-xs text-muted-foreground font-mono">{muscle.ip} <span className="text-[10px] text-muted-foreground/40 px-1">•</span> via {muscle.sources?.name || 'Fonte Direta'}</p>
                         </div>
                       </div>
-                      <Badge variant={muscle.status === 'online' ? 'default' : 'secondary'}>
-                        {muscle.status === 'online' ? 'Online' : 'Offline'}
-                      </Badge>
+                      <div className="flex items-center gap-3">
+                        <Badge variant={muscle.status === 'online' ? 'default' : 'secondary'} className="text-[10px] h-5">
+                          {muscle.status === 'online' ? 'Protegido' : 'Offline'}
+                        </Badge>
+                        <Terminal className="w-4 h-4 text-muted-foreground/50 group-hover:text-primary transition-colors cursor-pointer" />
+                      </div>
                     </div>
                   ))
                 )}
