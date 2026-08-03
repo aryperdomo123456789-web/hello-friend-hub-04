@@ -46,7 +46,7 @@ export const Route = createFileRoute("/")({
   },
 });
 
-  const { data: stats } = useSuspenseQuery({ queryKey: ["dashboard-stats"], queryFn: () => getDashboardStats() });
+  function Index() {
   const { data: sources } = useSuspenseQuery({ queryKey: ["sources"], queryFn: () => getSources() });
   const { data: muscles } = useSuspenseQuery({ queryKey: ["muscles"], queryFn: () => getMuscles() });
   const { data: live } = useSuspenseQuery({ queryKey: ["live"], queryFn: () => getLiveConnections() });
