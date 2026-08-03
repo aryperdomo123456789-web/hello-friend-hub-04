@@ -172,7 +172,7 @@ export const getXuiUsers = createServerFn({ method: "GET" })
         .limit(1)
         .single();
 
-      if (!source) throw new Error("Configuração da fonte XUI não encontrada.");
+      if (!source) return []; // Just return empty if not configured
 
       const { getXuiDb } = await import("./xui-db.server");
       const db = await getXuiDb({
@@ -209,12 +209,9 @@ export const getXuiUsers = createServerFn({ method: "GET" })
         created_at: row.created_at || Math.floor(Date.now() / 1000),
         exp_date: row.exp_date
       }));
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error fetching real XUI users:", error);
-      // Fallback for UI if DB is not connected yet or fails
-      return [
-        { id: 1, username: "SUPERVODS##2026", admin_enabled: true, enabled: true, max_connections: 1, active_connections: 0, created_at: 1720000000, exp_date: null },
-      ];
+      throw new Error(`Falha na conexão XUI: ${error.message}`);
     }
   });
 
