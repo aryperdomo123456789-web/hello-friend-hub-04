@@ -18,7 +18,6 @@ export default defineConfig({
         "node:stream": "stream-browserify",
         "node:buffer": "buffer",
         "process": "process/browser",
-        "mysql2": "mysql2/dist/mysql.js",
       },
     },
     define: {
@@ -28,8 +27,8 @@ export default defineConfig({
     },
     ssr: {
       // Explicitly externalize mysql2 to let workerd's nodejs_compat handle it
-      external: [],
-      noExternal: ['mysql2', 'process', 'stream-browserify', 'buffer', 'util', '@supabase/supabase-js'],
+      external: ['mysql2'],
+      noExternal: ['process', 'stream-browserify', 'buffer', 'util', '@supabase/supabase-js'],
     },
   },
 });
