@@ -132,7 +132,7 @@ function Index() {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="live" className="space-y-8 mt-0 outline-none">
+          <TabsContent value="live" className="space-y-8 mt-4 outline-none">
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
               <StatCard label="Conexões" value={stats.liveConnections} />
               <StatCard label="Transmitindo" value={stats.streamingCount} />
@@ -221,7 +221,7 @@ function Index() {
             </div>
           </TabsContent>
 
-          <TabsContent value="xui" className="space-y-8 mt-0 outline-none">
+          <TabsContent value="xui" className="space-y-8 mt-4 outline-none">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <StatCard label="Linhas no XUI" value={stats.liveConnections} />
               <StatCard label="Linhas Ativas" value={stats.streamingCount} className="text-green-500" />
@@ -231,15 +231,15 @@ function Index() {
             <XuiConnectionConfig />
           </TabsContent>
 
-          <TabsContent value="users" className="space-y-8 mt-0 outline-none">
+          <TabsContent value="users" className="space-y-8 mt-4 outline-none">
             <UsersTab />
           </TabsContent>
           
-          <TabsContent value="domains" className="space-y-8 mt-0 outline-none">
+          <TabsContent value="domains" className="space-y-8 mt-4 outline-none">
             <DomainsTab />
           </TabsContent>
 
-          <TabsContent value="lb" className="space-y-8 mt-0 outline-none">
+          <TabsContent value="lb" className="space-y-8 mt-4 outline-none">
             <MusclesTab muscles={muscles} />
           </TabsContent>
         </Tabs>
