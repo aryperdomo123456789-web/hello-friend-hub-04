@@ -20,11 +20,10 @@ async function getSupabaseAdmin() {
   });
 }
 
-
-
 export const getDashboardStats = createServerFn({ method: "GET" })
   .handler(async () => {
     try {
+      const supabaseAdmin = await getSupabaseAdmin();
       const { count: liveConnections } = await supabaseAdmin
         .from("live_connections")
         .select("*", { count: "exact", head: true });
@@ -86,6 +85,7 @@ export const getDashboardStats = createServerFn({ method: "GET" })
 export const getSources = createServerFn({ method: "GET" })
   .handler(async () => {
     try {
+      const supabaseAdmin = await getSupabaseAdmin();
       const { data, error } = await supabaseAdmin
         .from("sources")
         .select("*")
@@ -101,6 +101,7 @@ export const getSources = createServerFn({ method: "GET" })
 export const getMuscles = createServerFn({ method: "GET" })
   .handler(async () => {
     try {
+      const supabaseAdmin = await getSupabaseAdmin();
       const { data, error } = await supabaseAdmin
         .from("muscles")
         .select("*, sources(name)")
@@ -116,6 +117,7 @@ export const getMuscles = createServerFn({ method: "GET" })
 export const getLiveConnections = createServerFn({ method: "GET" })
   .handler(async () => {
     try {
+      const supabaseAdmin = await getSupabaseAdmin();
       const { data, error } = await supabaseAdmin
         .from("live_connections")
         .select("*, muscles(id, name)")
@@ -131,6 +133,7 @@ export const getLiveConnections = createServerFn({ method: "GET" })
 export const getHostHealth = createServerFn({ method: "GET" })
   .handler(async () => {
     try {
+      const supabaseAdmin = await getSupabaseAdmin();
       const { data, error } = await supabaseAdmin
         .from("host_health")
         .select("*")
@@ -146,6 +149,7 @@ export const getHostHealth = createServerFn({ method: "GET" })
 export const getProtectedDomains = createServerFn({ method: "GET" })
   .handler(async () => {
     try {
+      const supabaseAdmin = await getSupabaseAdmin();
       const { data, error } = await supabaseAdmin
         .from("protected_domains")
         .select("*")
@@ -161,6 +165,7 @@ export const getProtectedDomains = createServerFn({ method: "GET" })
 export const saveSourceConfig = createServerFn({ method: "POST" })
   .inputValidator((data: any) => data)
   .handler(async ({ data }) => {
+    const supabaseAdmin = await getSupabaseAdmin();
     const { data: existing } = await supabaseAdmin
       .from("sources")
       .select("id")
@@ -195,7 +200,6 @@ export const saveSourceConfig = createServerFn({ method: "POST" })
     return { success: true };
   });
 
-// XUI Integration logic from study of https://github.com/aryperdomo123456789-web/xcvmxuione-vr766-com
 export const testXuiConnection = createServerFn({ method: "POST" })
   .inputValidator((data: any) => data)
   .handler(async ({ data }) => {
@@ -204,7 +208,6 @@ export const testXuiConnection = createServerFn({ method: "POST" })
       const { getXuiDb } = await import("./xui-db.server");
       const db = await getXuiDb(data);
       
-      // Teste de query simples
       const [result]: any = await Promise.race([
         db.query("SELECT 1 as connected"),
         new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout de conexão (15s)")), 15000))
@@ -219,7 +222,6 @@ export const testXuiConnection = createServerFn({ method: "POST" })
       return { success: false, message: "O banco de dados respondeu mas o teste de query falhou." };
     } catch (error: any) {
       console.error("Erro fatal ao testar conexão XUI:", error);
-      // Extrair mensagem de erro amigável
       let errorMsg = error.message;
       if (errorMsg.includes("ETIMEDOUT")) errorMsg = "Tempo de conexão esgotado (Firewall bloqueando?).";
       if (errorMsg.includes("ECONNREFUSED")) errorMsg = "Conexão recusada (IP ou Porta errados?).";
@@ -232,19 +234,18 @@ export const testXuiConnection = createServerFn({ method: "POST" })
 export const getXuiUsers = createServerFn({ method: "GET" })
   .handler(async () => {
     try {
+      const supabaseAdmin = await getSupabaseAdmin();
       const { data: source } = await supabaseAdmin
         .from("sources")
         .select("*")
         .limit(1)
-
         .single();
 
-      if (!source) return []; // Just return empty if not configured
+      if (!source) return [];
 
       const { getXuiDb } = await import("./xui-db.server");
       const db = await getXuiDb(source);
       
-      // XC_VM use 'users' table, XUI use 'lines'
       let rows: any[] = [];
       try {
         const [linesRows]: any = await db.query(`
@@ -256,7 +257,6 @@ export const getXuiUsers = createServerFn({ method: "GET" })
         `);
         rows = linesRows;
       } catch (err) {
-        // Fallback to 'users' table (XC_VM style)
         const [usersRows]: any = await db.query(`
           SELECT 
             u.id, u.username, u.password, u.enabled, u.admin_enabled,
@@ -290,11 +290,11 @@ export const deleteXuiUser = createServerFn({ method: "POST" })
   .inputValidator((data: { id: number }) => data)
   .handler(async ({ data }) => {
     try {
+      const supabaseAdmin = await getSupabaseAdmin();
       const { data: source } = await supabaseAdmin
         .from("sources")
         .select("*")
         .limit(1)
-
         .single();
 
       if (!source) throw new Error("Configuração da fonte XUI não encontrada.");
@@ -314,11 +314,11 @@ export const toggleXuiUserStatus = createServerFn({ method: "POST" })
   .inputValidator((data: { id: number; enabled: boolean }) => data)
   .handler(async ({ data }) => {
     try {
+      const supabaseAdmin = await getSupabaseAdmin();
       const { data: source } = await supabaseAdmin
         .from("sources")
         .select("*")
         .limit(1)
-
         .single();
 
       if (!source) throw new Error("Configuração da fonte XUI não encontrada.");
@@ -333,4 +333,3 @@ export const toggleXuiUserStatus = createServerFn({ method: "POST" })
       return { success: false };
     }
   });
-

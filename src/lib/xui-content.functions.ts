@@ -18,8 +18,8 @@ async function getSupabaseAdmin() {
   });
 }
 
-
 async function getDb() {
+  const supabaseAdmin = await getSupabaseAdmin();
   const { data: source } = await supabaseAdmin
     .from("sources")
     .select("*")
@@ -42,7 +42,6 @@ export const getXuiCategories = createServerFn({ method: "GET" })
         const [xuiRows]: any = await db.query("SELECT id, category_name as name, category_type as type FROM streams_categories ORDER BY category_name ASC");
         rows = xuiRows;
       } catch (err) {
-        // XC_VM might use different names, but categories are usually the same table name
         const [xcvmRows]: any = await db.query("SELECT id, category_name as name, category_type as type FROM categories ORDER BY category_name ASC");
         rows = xcvmRows;
       }
@@ -65,7 +64,6 @@ export const getXuiStreams = createServerFn({ method: "POST" })
       } else if (data.type === 'movie') {
         query = "SELECT id, stream_display_name as name, category_id, stream_icon, 'movie' as stream_type FROM streams WHERE type = 2 ORDER BY id DESC LIMIT 500";
       } else {
-        // Try streams_series (XUI/XC_VM common)
         try {
           const [rows]: any = await db.query("SELECT id, title as name, category_id, cover as stream_icon, 'series' as stream_type FROM streams_series ORDER BY id DESC LIMIT 500");
           await db.end();
