@@ -89,16 +89,30 @@ function Index() {
           </div>
         </header>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-          <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Conexões</p><div className="text-xl font-bold">{stats.liveConnections}</div></CardContent></Card>
-          <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Transmitindo</p><div className="text-xl font-bold">{stats.streamingCount}</div></CardContent></Card>
-          <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Canais</p><div className="text-xl font-bold">{stats.channelsCount}</div></CardContent></Card>
-          <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Filmes</p><div className="text-xl font-bold">{stats.moviesCount}</div></CardContent></Card>
-          <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Séries</p><div className="text-xl font-bold">{stats.seriesCount}</div></CardContent></Card>
-          <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Assinantes</p><div className="text-xl font-bold">{stats.liveConnections}</div></CardContent></Card>
-          <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">IPs</p><div className="text-xl font-bold">{stats.distinctIps}</div></CardContent></Card>
-          <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Slots</p><div className="text-xl font-bold">{stats.slotsSold}</div></CardContent></Card>
-        </div>
+        <Tabs defaultValue="live" className="w-full space-y-6">
+          <TabsList className="bg-card/50 border border-border/50 p-1 rounded-xl h-auto">
+            <TabsTrigger value="live" className="gap-2 px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Activity className="w-4 h-4" />
+              Painel Geral
+            </TabsTrigger>
+            <TabsTrigger value="xui" className="gap-2 px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Monitor className="w-4 h-4" />
+              Gerência XUI
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="live" className="space-y-8 mt-0 outline-none">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+              <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Conexões</p><div className="text-xl font-bold">{stats.liveConnections}</div></CardContent></Card>
+              <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Transmitindo</p><div className="text-xl font-bold">{stats.streamingCount}</div></CardContent></Card>
+              <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Canais</p><div className="text-xl font-bold">{stats.channelsCount}</div></CardContent></Card>
+              <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Filmes</p><div className="text-xl font-bold">{stats.moviesCount}</div></CardContent></Card>
+              <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Séries</p><div className="text-xl font-bold">{stats.seriesCount}</div></CardContent></Card>
+              <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Assinantes</p><div className="text-xl font-bold">{stats.liveConnections}</div></CardContent></Card>
+              <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">IPs</p><div className="text-xl font-bold">{stats.distinctIps}</div></CardContent></Card>
+              <Card className="col-span-1 border-border/50 bg-card/50"><CardContent className="p-4"><p className="text-xs text-muted-foreground">Slots</p><div className="text-xl font-bold">{stats.slotsSold}</div></CardContent></Card>
+            </div>
+
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Real-time Monitoring Section */}
