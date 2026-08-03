@@ -168,8 +168,8 @@ export const getXuiUsers = createServerFn({ method: "GET" })
       const { data: source } = await supabaseAdmin
         .from("sources")
         .select("*")
-        .order("created_at", { ascending: false })
         .limit(1)
+
         .single();
 
       if (!source) return []; // Just return empty if not configured
