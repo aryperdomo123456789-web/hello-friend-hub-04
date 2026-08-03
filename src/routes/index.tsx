@@ -102,22 +102,26 @@ function Index() {
         </header>
 
         <Tabs defaultValue="live" className="w-full space-y-6">
-          <TabsList className="bg-card/50 border border-border/50 p-1 rounded-xl h-auto flex-wrap justify-start">
-            <TabsTrigger value="live" className="gap-2 px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              <Activity className="w-4 h-4" />
-              Rastreamento ao Vivo
+          <TabsList className="bg-card/50 border border-border/50 p-1 rounded-xl h-auto flex gap-1 overflow-x-auto no-scrollbar justify-start mb-2 sm:mb-0">
+            <TabsTrigger value="live" className="gap-2 px-3 sm:px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-nowrap text-xs sm:text-sm">
+              <Activity className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span className="hidden xs:inline">Rastreamento ao Vivo</span>
+              <span className="xs:hidden">Live</span>
             </TabsTrigger>
-            <TabsTrigger value="xui" className="gap-2 px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              <Monitor className="w-4 h-4" />
-              Gerência XUI
+            <TabsTrigger value="xui" className="gap-2 px-3 sm:px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-nowrap text-xs sm:text-sm">
+              <Monitor className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span className="hidden xs:inline">Gerência XUI</span>
+              <span className="xs:hidden">XUI</span>
             </TabsTrigger>
-            <TabsTrigger value="domains" className="gap-2 px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              <Globe className="w-4 h-4" />
-              Domínios
+            <TabsTrigger value="domains" className="gap-2 px-3 sm:px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-nowrap text-xs sm:text-sm">
+              <Globe className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span className="hidden xs:inline">Domínios</span>
+              <span className="xs:hidden">DNS</span>
             </TabsTrigger>
-            <TabsTrigger value="lb" className="gap-2 px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              <Server className="w-4 h-4" />
-              Músculos (LB)
+            <TabsTrigger value="lb" className="gap-2 px-3 sm:px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-nowrap text-xs sm:text-sm">
+              <Server className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span className="hidden xs:inline">Músculos (LB)</span>
+              <span className="xs:hidden">LB</span>
             </TabsTrigger>
           </TabsList>
 

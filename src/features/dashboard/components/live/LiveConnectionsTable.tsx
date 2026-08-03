@@ -9,8 +9,8 @@ interface LiveConnectionsTableProps {
 
 export function LiveConnectionsTable({ connections }: LiveConnectionsTableProps) {
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-left border-collapse min-w-[800px]">
+    <div className="overflow-x-auto -mx-4 md:mx-0">
+      <table className="w-full text-left border-collapse min-w-[1000px] md:min-w-full">
         <thead>
           <tr className="bg-muted/30 text-[10px] uppercase tracking-wider font-bold text-muted-foreground border-b border-border/50">
             <th className="px-4 py-3">Estado</th>
