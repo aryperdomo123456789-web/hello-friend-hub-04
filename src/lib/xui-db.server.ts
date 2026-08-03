@@ -16,6 +16,14 @@ export async function getXuiDb(config: any) {
     };
   }
 
+  // Importação dinâmica para garantir que o lru-cache seja carregado no ambiente correto
+  try {
+    const lru = await import('lru-cache');
+    console.log("[System] lru-cache carregado com sucesso");
+  } catch (e) {
+    console.error("[System] Erro ao carregar lru-cache:", e);
+  }
+
   const host = config.ip || '38.190.176.170';
   const user = config.db_user || config.user || 'bancovods';
   const password = config.db_password || config.password || 'vmxfontevoods12@';
@@ -31,26 +39,18 @@ export async function getXuiDb(config: any) {
       password,
       database,
       port,
-      connectTimeout: 15000,
+      connectTimeout: 20000,
       waitForConnections: true,
       connectionLimit: 1,
       queueLimit: 0,
       enableKeepAlive: true,
-      // Desabilita eval para evitar erro de segurança em workers
       disableEval: true,
     };
 
-    // Tenta conexão direta usando a versão pura de JS do mysql2 que o Vite empacota
     const connection = await mysql.createConnection(connectionOptions);
     return connection;
   } catch (error: any) {
     console.error("[MySQL] Erro fatal de conexão:", error.message);
-    
-    // Se o erro for lru-cache ou módulos internos, tentamos uma abordagem de carregamento diferente
-    if (error.message.includes('lru') || error.message.includes('module')) {
-       throw new Error(`Erro de infraestrutura (módulo ausente): ${error.message}. Verifique o bundling no vite.config.ts.`);
-    }
-    
     throw new Error(`Falha na conexão XUI: ${error.message}`);
   }
 }
