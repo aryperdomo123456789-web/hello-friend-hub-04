@@ -24,13 +24,25 @@ export function XuiConnectionConfig() {
               <label className="text-xs font-bold uppercase text-muted-foreground">IP/host do banco do XUI</label>
               <Input value="38.190.176.170" readOnly className="bg-background/50 font-mono text-sm" />
             </div>
-            <div className="space-y-2">
-              <label className="text-xs font-bold uppercase text-muted-foreground">Porta do banco</label>
-              <Input value="3306" readOnly className="bg-background/50 font-mono text-sm" />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase text-muted-foreground">Porta do banco</label>
+                <Input value="3306" readOnly className="bg-background/50 font-mono text-sm" />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase text-muted-foreground">Nome do banco</label>
+                <Input value="xui" readOnly className="bg-background/50 font-mono text-sm" />
+              </div>
             </div>
-            <div className="space-y-2">
-              <label className="text-xs font-bold uppercase text-muted-foreground">Nome do banco</label>
-              <Input value="xui" readOnly className="bg-background/50 font-mono text-sm" />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase text-muted-foreground">Usuário DB</label>
+                <Input value="bancovods" readOnly className="bg-background/50 font-mono text-sm" />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase text-muted-foreground">Senha DB</label>
+                <Input value="bancovods" readOnly type="password" className="bg-background/50 font-mono text-sm" />
+              </div>
             </div>
           </div>
           <div className="space-y-4">
