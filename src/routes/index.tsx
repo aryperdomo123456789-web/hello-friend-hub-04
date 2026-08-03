@@ -229,7 +229,6 @@ function Index() {
               <StatCard label="Banco XUI" value="ON" className="text-primary" />
             </div>
             <XuiConnectionConfig />
-            <XuiOperations muscleCount={muscles.length} />
           </TabsContent>
 
           <TabsContent value="users" className="space-y-8 mt-0 outline-none">
