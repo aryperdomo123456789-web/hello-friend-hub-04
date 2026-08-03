@@ -44,29 +44,33 @@ import { ContentTab } from "@/features/dashboard/components/content/ContentTab";
 export const Route = createFileRoute("/")({
   component: Index,
   loader: async ({ context }) => {
-    await Promise.all([
-      context.queryClient.ensureQueryData({
-        queryKey: ["dashboard-stats"],
-        queryFn: () => getDashboardStats(),
-      }),
-      context.queryClient.ensureQueryData({
-        queryKey: ["sources"],
-        queryFn: () => getSources(),
-      }),
-      context.queryClient.ensureQueryData({
-        queryKey: ["muscles"],
-        queryFn: () => getMuscles(),
-      }),
-      context.queryClient.ensureQueryData({
-        queryKey: ["live"],
-        queryFn: () => getLiveConnections(),
-      }),
-
-      context.queryClient.ensureQueryData({
-        queryKey: ["health"],
-        queryFn: () => getHostHealth(),
-      }),
-    ]);
+    try {
+      await Promise.all([
+        context.queryClient.ensureQueryData({
+          queryKey: ["dashboard-stats"],
+          queryFn: () => getDashboardStats(),
+        }),
+        context.queryClient.ensureQueryData({
+          queryKey: ["sources"],
+          queryFn: () => getSources(),
+        }),
+        context.queryClient.ensureQueryData({
+          queryKey: ["muscles"],
+          queryFn: () => getMuscles(),
+        }),
+        context.queryClient.ensureQueryData({
+          queryKey: ["live"],
+          queryFn: () => getLiveConnections(),
+        }),
+        context.queryClient.ensureQueryData({
+          queryKey: ["health"],
+          queryFn: () => getHostHealth(),
+        }),
+      ]);
+    } catch (error) {
+      console.error("Loader error caught:", error);
+      // Don't re-throw to prevent Root ErrorComponent from triggering if one fetch fails
+    }
   },
 });
 
