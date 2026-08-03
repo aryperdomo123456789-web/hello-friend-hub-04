@@ -269,14 +269,51 @@ export function DomainsTab() {
       </Card>
 
 
-      <div className="p-6 rounded-2xl bg-amber-500/5 border border-amber-500/10 space-y-3">
-        <div className="flex items-center gap-2 text-amber-500">
-          <AlertTriangle className="w-5 h-5" />
-          <h3 className="font-bold text-sm uppercase tracking-wider">Atenção ao DNS</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="p-6 rounded-2xl bg-amber-500/5 border border-amber-500/10 space-y-3">
+          <div className="flex items-center gap-2 text-amber-500">
+            <AlertTriangle className="w-5 h-5" />
+            <h3 className="font-bold text-sm uppercase tracking-wider">Atenção ao DNS (Nuvem Cinza / DNS Only)</h3>
+          </div>
+          <div className="space-y-4 text-[12px] text-muted-foreground leading-relaxed">
+            <p>
+              O projeto agora trabalha com <strong>um XUI só</strong>. A VPS atual fica como <strong>main/cérebro</strong> do sistema; os domínios públicos podem apontar para ela ou para um LB já instalado, mas <strong>nunca</strong> para o IP ou DNS do XUI.
+            </p>
+            
+            <div className="bg-background/40 p-3 rounded-lg border border-border/50 space-y-2">
+              <p className="font-bold text-[10px] text-foreground uppercase tracking-widest">Exemplos de Apontamento:</p>
+              <div className="grid grid-cols-3 gap-2 border-b border-border/30 pb-1 text-[10px] font-bold text-muted-foreground">
+                <span>TIPO</span>
+                <span>NOME</span>
+                <span>CONTEÚDO</span>
+              </div>
+              <div className="grid grid-cols-3 gap-2 text-[11px] font-mono">
+                <span className="text-primary">CNAME</span>
+                <span>meudominio.com</span>
+                <span className="text-foreground">cdnvoods.vr766.com</span>
+              </div>
+              <div className="grid grid-cols-3 gap-2 text-[11px] font-mono">
+                <span className="text-primary">A</span>
+                <span>meudominio.com</span>
+                <span className="text-foreground">45.140.192.237</span>
+              </div>
+            </div>
+
+            <p>
+              Quando a ideia for tirar banda da VPS atual, o caminho certo é: <strong>cérebro decide a rota e o domínio público do cliente entra no LB.</strong>
+            </p>
+          </div>
         </div>
-        <p className="text-[12px] text-muted-foreground leading-relaxed">
-          O domínio público do cliente aponta SEMPRE PARA O MAIN DO SISTEMA. A origem XUI fica oculta no banco de dados, protegendo contra vazamentos. Playlists e APIs são reescritas e entregues pelo domínio público protegido.
-        </p>
+
+        <div className="p-6 rounded-2xl bg-primary/5 border border-primary/10 space-y-3">
+          <div className="flex items-center gap-2 text-primary">
+            <Shield className="w-5 h-5" />
+            <h3 className="font-bold text-sm uppercase tracking-wider">Proteção de Origem</h3>
+          </div>
+          <p className="text-[12px] text-muted-foreground leading-relaxed">
+            O domínio público do cliente aponta SEMPRE PARA O MAIN DO SISTEMA (ou LB autorizado). A origem XUI fica oculta no banco de dados local, nunca vira DNS público e nunca aparece em playlist, player_api ou EPG. Isso garante que o IP real da sua fonte nunca seja exposto.
+          </p>
+        </div>
       </div>
     </div>
   );
