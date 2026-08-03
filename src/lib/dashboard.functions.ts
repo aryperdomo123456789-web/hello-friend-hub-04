@@ -119,6 +119,75 @@ export const getLiveConnections = createServerFn({ method: "GET" })
   .handler(async () => {
     try {
       const supabaseAdmin = await getSupabaseAdmin();
+      
+      // Tentar pegar a fonte configurada
+      const { data: source } = await supabaseAdmin
+        .from("sources")
+        .select("*")
+        .limit(1)
+        .single();
+
+      if (source) {
+        try {
+          const { getXuiDb } = await import("./xui-db.server");
+          const db = await getXuiDb(source);
+          
+          // Buscar conexões reais do XUI/XC_VM
+          let liveRows: any[] = [];
+          try {
+            const [rows]: any = await db.query(`
+              SELECT 
+                l.username as subscriber_name,
+                'canal' as stream_type,
+                'Streaming' as activity_type,
+                s.stream_display_name as watching_title,
+                cl.user_ip as ip_address,
+                'App XUI' as app_name,
+                cl.s_time as started_at
+              FROM lines_live cl
+              JOIN \`lines\` l ON cl.user_id = l.id
+              LEFT JOIN streams s ON cl.stream_id = s.id
+              LIMIT 100
+            `);
+            liveRows = rows;
+          } catch (e) {
+            const [rows]: any = await db.query(`
+              SELECT 
+                u.username as subscriber_name,
+                'canal' as stream_type,
+                'Streaming' as activity_type,
+                s.stream_display_name as watching_title,
+                ul.user_ip as ip_address,
+                'App XC_VM' as app_name,
+                ul.s_time as started_at
+              FROM user_live ul
+              JOIN users u ON ul.user_id = u.id
+              LEFT JOIN streams s ON ul.stream_id = s.id
+              LIMIT 100
+            `);
+            liveRows = rows;
+          }
+          await db.end();
+
+          if (liveRows && liveRows.length > 0) {
+            return liveRows.map((row, idx) => ({
+              id: `xui-${idx}`,
+              subscriber_name: row.subscriber_name,
+              stream_type: row.stream_type,
+              activity_type: row.activity_type,
+              watching_title: row.watching_title || "Desconhecido",
+              ip_address: row.ip_address,
+              app_name: row.app_name,
+              started_at: row.started_at ? new Date(Number(row.started_at) * 1000).toISOString() : new Date().toISOString(),
+              muscle_id: "main",
+              muscles: { id: "main", name: "Main" }
+            }));
+          }
+        } catch (dbErr) {
+          console.error("Erro ao buscar conexões reais do MySQL, usando Supabase fallback:", dbErr);
+        }
+      }
+
       const { data, error } = await supabaseAdmin
         .from("live_connections")
         .select("*, muscles(id, name)")
