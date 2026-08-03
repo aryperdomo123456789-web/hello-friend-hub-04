@@ -17,7 +17,14 @@ export default defineConfig({
         "node:util": "util",
         "node:stream": "stream-browserify",
         "node:buffer": "buffer",
+        "process": "process/browser",
       },
     },
+    define: {
+      'process.env': '{}',
+      'process.version': '"v18.0.0"',
+      'process.nextTick': '((fn, ...args) => setTimeout(() => fn(...args), 0))',
+      'global': 'globalThis',
+    }
   },
 });
