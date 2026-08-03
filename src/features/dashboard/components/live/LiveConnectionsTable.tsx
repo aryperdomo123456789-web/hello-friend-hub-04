@@ -13,14 +13,17 @@ export function LiveConnectionsTable({ connections }: LiveConnectionsTableProps)
       <table className="w-full text-left border-collapse min-w-[1000px] md:min-w-full">
         <thead>
           <tr className="bg-muted/30 text-[10px] uppercase tracking-wider font-bold text-muted-foreground border-b border-border/50">
-            <th className="px-4 py-3">Estado</th>
-            <th className="px-4 py-3">Assinante</th>
-            <th className="px-4 py-3">Está Assistindo</th>
-            <th className="px-4 py-3">IP Final</th>
-            <th className="px-4 py-3">App</th>
-            <th className="px-4 py-3">Saída</th>
-            <th className="px-4 py-3">Status</th>
-            <th className="px-4 py-3 text-right">Ação</th>
+            <th className="px-4 py-3">ESTADO</th>
+            <th className="px-4 py-3">ASSINANTE</th>
+            <th className="px-4 py-3">TIPO</th>
+            <th className="px-4 py-3">ESTÁ ASSISTINDO</th>
+            <th className="px-4 py-3">IP</th>
+            <th className="px-4 py-3">APP</th>
+            <th className="px-4 py-3">UPTIME</th>
+            <th className="px-4 py-3">ENTREGA</th>
+            <th className="px-4 py-3">SAÍDA</th>
+            <th className="px-4 py-3">ÚLTIMO DADO</th>
+            <th className="px-4 py-3 text-right">AÇÃO</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-border/40">
