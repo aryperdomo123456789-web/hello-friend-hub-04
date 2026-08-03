@@ -172,12 +172,11 @@ export const getLiveConnections = createServerFn({ method: "GET" })
           if (liveRows && liveRows.length > 0) {
             return liveRows.map((row, idx) => ({
               id: `xui-${idx}`,
-              subscriber_name: row.subscriber_name,
+              username: row.subscriber_name,
               stream_type: row.stream_type,
-              activity_type: row.activity_type,
-              watching_title: row.watching_title || "Desconhecido",
+              stream_id: idx,
               ip_address: row.ip_address,
-              app_name: row.app_name,
+              user_agent: row.app_name,
               started_at: row.started_at ? new Date(Number(row.started_at) * 1000).toISOString() : new Date().toISOString(),
               muscle_id: "main",
               muscles: { id: "main", name: "Main" }
