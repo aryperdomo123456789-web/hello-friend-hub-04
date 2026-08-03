@@ -100,7 +100,7 @@ export function UsersTab() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-muted/30 text-[10px] uppercase tracking-wider font-bold text-muted-foreground border-b border-border/50">
-                  <th className="px-6 py-4">Usuário</th>
+                  <th className="px-6 py-4">Usuário / Senha</th>
                   <th className="px-6 py-4">Status</th>
                   <th className="px-6 py-4">Conexões</th>
                   <th className="px-6 py-4">Expiração</th>
@@ -137,9 +137,11 @@ export function UsersTab() {
                           </div>
                           <div>
                             <div className="text-sm font-bold text-foreground">{user.username}</div>
-                            <div className="text-[10px] text-muted-foreground uppercase font-semibold">
-                              {user.admin_enabled ? 'Administrador' : 'Cliente'}
-                            </div>
+                            {user.password && (
+                              <div className="text-[10px] text-muted-foreground font-mono">
+                                Pass: {user.password}
+                              </div>
+                            )}
                           </div>
                         </div>
                       </td>

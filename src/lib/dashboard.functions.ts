@@ -187,13 +187,13 @@ export const getXuiUsers = createServerFn({ method: "GET" })
         SELECT 
           id, 
           username, 
-          admin_enabled, 
-          enabled, 
+          password,
+          status as enabled,
           max_connections, 
           active_connections, 
-          UNIX_TIMESTAMP(created_at) as created_at, 
+          created_at, 
           exp_date 
-        FROM lines 
+        FROM users 
         ORDER BY created_at DESC
         LIMIT 500
       `);
@@ -202,12 +202,13 @@ export const getXuiUsers = createServerFn({ method: "GET" })
       return rows.map((row: any) => ({
         id: row.id,
         username: row.username,
-        admin_enabled: !!row.admin_enabled,
-        enabled: !!row.enabled,
+        password: row.password,
+        admin_enabled: false,
+        enabled: row.enabled === 1 || row.enabled === true,
         max_connections: row.max_connections || 1,
         active_connections: row.active_connections || 0,
-        created_at: row.created_at || Math.floor(Date.now() / 1000),
-        exp_date: row.exp_date
+        created_at: row.created_at ? Math.floor(new Date(row.created_at).getTime() / 1000) : Math.floor(Date.now() / 1000),
+        exp_date: row.exp_date ? Math.floor(new Date(row.exp_date).getTime() / 1000) : null
       }));
     } catch (error: any) {
       console.error("Error fetching real XUI users:", error);
@@ -236,7 +237,7 @@ export const deleteXuiUser = createServerFn({ method: "POST" })
         password: source.db_password,
         database: source.db_name
       });
-      await db.query("DELETE FROM lines WHERE id = ?", [data.id]);
+      await db.query("DELETE FROM users WHERE id = ?", [data.id]);
       await db.end();
       return { success: true };
     } catch (error) {
@@ -266,7 +267,7 @@ export const toggleXuiUserStatus = createServerFn({ method: "POST" })
         password: source.db_password,
         database: source.db_name
       });
-      await db.query("UPDATE lines SET enabled = ? WHERE id = ?", [data.enabled ? 1 : 0, data.id]);
+      await db.query("UPDATE users SET status = ? WHERE id = ?", [data.enabled ? 1 : 0, data.id]);
       await db.end();
       return { success: true };
     } catch (error) {
