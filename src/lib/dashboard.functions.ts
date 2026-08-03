@@ -9,8 +9,7 @@ export const getDashboardStats = createServerFn({ method: "GET" })
 
     const { count: streamingCount } = await supabaseAdmin
       .from("live_connections")
-      .select("*", { count: "exact", head: true })
-      .eq("status", "streaming");
+      .select("*", { count: "exact", head: true });
 
     const { count: channelsCount } = await supabaseAdmin
       .from("live_connections")
