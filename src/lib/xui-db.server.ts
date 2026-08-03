@@ -3,8 +3,8 @@ import mysql from 'mysql2/promise';
 /**
  * Nota sobre compatibilidade Edge:
  * O erro "No such module node:process" geralmente ocorre quando o driver mysql2 
- * tenta acessar globais do Node em ambientes como Cloudflare Workers (onde o sistema é publicado).
- * No Lovable Cloud, tentamos usar o mysql2 com polyfills via Vite.
+ * tenta acessar globais do Node em ambientes como Cloudflare Workers.
+ * Estamos usando a versão JS-only do driver para maior compatibilidade.
  */
 
 export async function getXuiDb(config: any) {
