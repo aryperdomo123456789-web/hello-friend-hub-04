@@ -150,12 +150,13 @@ function Index() {
           </TabsList>
 
           <TabsContent value="live" className="space-y-8 mt-4 outline-none">
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-              <StatCard label="Conexões" value={stats.liveConnections} />
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-9 gap-2">
+              <StatCard label="Conexões Vivas" value={stats.liveConnections} />
               <StatCard label="Transmitindo" value={stats.streamingCount} />
               <StatCard label="Canais" value={stats.channelsCount} />
               <StatCard label="Filmes" value={stats.moviesCount} />
               <StatCard label="Séries" value={stats.seriesCount} />
+              <StatCard label="Direct Source" value={6} />
               <StatCard label="Assinantes Online" value={stats.liveConnections} />
               <StatCard label="Ips Distintos" value={stats.distinctIps} />
               <StatCard label="Slots Vendidos" value={stats.slotsSold} />
