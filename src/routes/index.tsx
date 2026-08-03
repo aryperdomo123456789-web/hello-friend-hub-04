@@ -244,15 +244,6 @@ function Index() {
           </TabsContent>
         </Tabs>
 
-        <footer className="p-6 rounded-2xl bg-primary/5 border border-primary/10 space-y-3">
-          <div className="flex items-center gap-2 text-primary">
-            <Shield className="w-5 h-5" />
-            <h3 className="font-bold text-lg">Proteção XUI Ativa</h3>
-          </div>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            O sistema centralizado (Cérebro) gerencia seus Músculos (LBs) para garantir que sua fonte XUI permaneça oculta e segura.
-          </p>
-        </footer>
       </div>
     </div>
   );
