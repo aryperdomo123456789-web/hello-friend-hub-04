@@ -16,22 +16,26 @@ export function XuiConnectionConfig() {
     apiUrl: "http://38.190.176.170/fejvCHkR",
     apiToken: "EAFD11794F03C3E3BFDA8FAFD6500809"
   });
+  const [isTesting, setIsTesting] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     async function loadConfig() {
       try {
         const sources = await getSources();
         if (sources && sources.length > 0) {
-          const s = sources[0];
-          setConfig({
-            ip: s.ip || "",
-            port: String(s.db_port || "3306"),
-            database: s.db_name || "xui",
-            user: s.db_user || "",
-            password: s.db_password || "",
-            apiUrl: s.api_url || "",
-            apiToken: s.api_token || ""
-          });
+          const s = sources[0] as any;
+          if (s) {
+            setConfig({
+              ip: s.ip || "",
+              port: String(s.db_port || "3306"),
+              database: s.db_name || "xui",
+              user: s.db_user || "",
+              password: s.db_password || "",
+              apiUrl: s.api_url || "",
+              apiToken: s.api_token || ""
+            });
+          }
         }
       } catch (error) {
         console.error("Erro ao carregar configurações:", error);
