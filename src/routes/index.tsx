@@ -42,7 +42,16 @@ export const Route = createFileRoute("/")({
         queryKey: ["muscles"],
         queryFn: () => getMuscles(),
       }),
+      context.queryClient.ensureQueryData({
+        queryKey: ["live"],
+        queryFn: () => getLiveConnections(),
+      }),
+      context.queryClient.ensureQueryData({
+        queryKey: ["health"],
+        queryFn: () => getHostHealth(),
+      }),
     ]);
+
   },
 });
 
