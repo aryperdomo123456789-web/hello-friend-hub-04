@@ -43,8 +43,6 @@ export function XuiConnectionConfig() {
     }
     loadConfig();
   }, []);
-  const [isTesting, setIsTesting] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
 
   const handleTest = async () => {
     setIsTesting(true);
