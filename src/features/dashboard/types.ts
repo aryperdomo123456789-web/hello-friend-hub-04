@@ -20,15 +20,15 @@ export interface ProtectedDomain {
 
 export interface Source {
   id: string;
-  name: string;
+  name?: string | null;
   ip: string;
   db_port?: number | null;
-  db_name?: string;
-  db_user?: string;
-  db_password?: string;
-  api_url?: string;
-  api_token?: string;
-  origin_type?: 'A' | 'CNAME';
+  db_name?: string | null;
+  db_user?: string | null;
+  db_password?: string | null;
+  api_url?: string | null;
+  api_token?: string | null;
+  origin_type?: string | null;
   created_at?: string | null;
 }
 
