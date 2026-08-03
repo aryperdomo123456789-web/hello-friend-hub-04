@@ -14,8 +14,9 @@ export interface Source {
   id: string;
   name: string;
   ip: string;
-  created_at?: string;
+  created_at?: string | null;
 }
+
 
 export interface Muscle {
   id: string;
