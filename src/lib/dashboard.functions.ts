@@ -185,16 +185,17 @@ export const getXuiUsers = createServerFn({ method: "GET" })
       
       const [rows]: any = await db.query(`
         SELECT 
-          id, 
-          username, 
-          password,
-          status as enabled,
-          max_connections, 
-          active_connections, 
-          created_at, 
-          exp_date 
-        FROM users 
-        ORDER BY created_at DESC
+          l.id, 
+          l.username, 
+          l.password,
+          l.enabled,
+          l.admin_enabled,
+          l.max_connections,
+          l.created_at,
+          l.exp_date,
+          (SELECT COUNT(*) FROM lines_live ll WHERE ll.user_id = l.id) AS active_connections
+        FROM \`lines\` l
+        ORDER BY l.id DESC
         LIMIT 500
       `);
       await db.end();
@@ -203,13 +204,14 @@ export const getXuiUsers = createServerFn({ method: "GET" })
         id: row.id,
         username: row.username,
         password: row.password,
-        admin_enabled: false,
+        admin_enabled: row.admin_enabled === 1 || row.admin_enabled === true,
         enabled: row.enabled === 1 || row.enabled === true,
         max_connections: row.max_connections || 1,
-        active_connections: row.active_connections || 0,
-        created_at: row.created_at ? Math.floor(new Date(row.created_at).getTime() / 1000) : Math.floor(Date.now() / 1000),
-        exp_date: row.exp_date ? Math.floor(new Date(row.exp_date).getTime() / 1000) : null
+        active_connections: Number(row.active_connections) || 0,
+        created_at: row.created_at ? Number(row.created_at) : Math.floor(Date.now() / 1000),
+        exp_date: row.exp_date ? Number(row.exp_date) : null
       }));
+
     } catch (error: any) {
       console.error("Error fetching real XUI users:", error);
       throw new Error(`Falha na conexão XUI: ${error.message}`);
@@ -237,7 +239,7 @@ export const deleteXuiUser = createServerFn({ method: "POST" })
         password: source.db_password,
         database: source.db_name
       });
-      await db.query("DELETE FROM users WHERE id = ?", [data.id]);
+      await db.query("DELETE FROM `lines` WHERE id = ?", [data.id]);
       await db.end();
       return { success: true };
     } catch (error) {
@@ -267,7 +269,7 @@ export const toggleXuiUserStatus = createServerFn({ method: "POST" })
         password: source.db_password,
         database: source.db_name
       });
-      await db.query("UPDATE users SET status = ? WHERE id = ?", [data.enabled ? 1 : 0, data.id]);
+      await db.query("UPDATE `lines` SET enabled = ? WHERE id = ?", [data.enabled ? 1 : 0, data.id]);
       await db.end();
       return { success: true };
     } catch (error) {

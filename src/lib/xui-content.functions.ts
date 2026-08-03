@@ -25,7 +25,7 @@ export const getXuiCategories = createServerFn({ method: "GET" })
   .handler(async () => {
     try {
       const db = await getDb();
-      const [rows]: any = await db.query("SELECT id, category_name as name, category_type as type FROM stream_categories ORDER BY category_name ASC");
+      const [rows]: any = await db.query("SELECT id, category_name as name, category_type as type FROM streams_categories ORDER BY category_name ASC");
       await db.end();
       return rows;
     } catch (e) {
@@ -45,7 +45,7 @@ export const getXuiStreams = createServerFn({ method: "POST" })
       } else if (data.type === 'movie') {
         query = "SELECT id, stream_display_name as name, category_id, stream_icon, 'movie' as stream_type FROM streams WHERE type = 2 ORDER BY id DESC LIMIT 500";
       } else {
-        query = "SELECT id, series_name as name, category_id, last_modified as stream_icon, 'series' as stream_type FROM series ORDER BY id DESC LIMIT 500";
+        query = "SELECT id, title as name, category_id, cover as stream_icon, 'series' as stream_type FROM streams_series ORDER BY id DESC LIMIT 500";
       }
       const [rows]: any = await db.query(query);
       await db.end();
@@ -60,7 +60,7 @@ export const getXuiEpisodes = createServerFn({ method: "GET" })
   .handler(async () => {
     try {
       const db = await getDb();
-      const [rows]: any = await db.query("SELECT id, series_id, title, image, season_num, episode_num FROM episodes ORDER BY id DESC LIMIT 500");
+      const [rows]: any = await db.query("SELECT e.id, e.series_id, s.stream_display_name as title, s.stream_icon as image, e.season_num, e.episode_num FROM streams_episodes e LEFT JOIN streams s ON s.id = e.stream_id ORDER BY e.id DESC LIMIT 500");
       await db.end();
       return rows;
     } catch (e) {
