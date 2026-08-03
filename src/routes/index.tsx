@@ -91,7 +91,7 @@ function Index() {
             <div>
               <h1 className="text-3xl font-bold tracking-tight">CDN Voods - Cérebro</h1>
               <p className="text-muted-foreground mt-1 text-sm md:text-base">
-                Gerenciamento centralizado de origens e load balancers (músculos).
+                oq acha de pegar esse projeto que aj vinculei com git hub e colocar em uma vps br 2 cpu 6 ram 1/1 para ser cerebro? Daia qui na lovable fica laboratorio de produção e la fica produção uso?
               </p>
             </div>
             <div className="md:hidden">
