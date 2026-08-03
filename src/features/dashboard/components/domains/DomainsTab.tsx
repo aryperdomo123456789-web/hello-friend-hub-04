@@ -18,8 +18,8 @@ export function DomainsTab() {
           </div>
         </CardHeader>
         <CardContent className="p-6">
-          <div className="rounded-xl border border-border/40 overflow-hidden mb-6">
-            <table className="w-full text-left text-sm border-collapse">
+          <div className="rounded-xl border border-border/40 overflow-hidden mb-6 -mx-4 md:mx-0 overflow-x-auto">
+            <table className="w-full text-left text-sm border-collapse min-w-[600px] md:min-w-full">
               <thead className="bg-muted/30">
                 <tr className="border-b border-border/50 text-[10px] font-bold uppercase text-muted-foreground">
                   <th className="px-4 py-4">TIPO</th>

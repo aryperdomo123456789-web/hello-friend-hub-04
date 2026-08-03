@@ -19,18 +19,18 @@ export function XuiOperations({ muscleCount }: XuiOperationsProps) {
         </CardHeader>
         <CardContent className="p-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Button variant="outline" className="h-24 flex flex-col gap-2 hover:border-primary/50 hover:bg-primary/5 transition-all">
-              <Plus className="w-6 h-6 text-primary" />
+            <Button variant="outline" className="h-20 sm:h-24 flex flex-col gap-1 sm:gap-2 hover:border-primary/50 hover:bg-primary/5 transition-all">
+              <Plus className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
               <div className="flex flex-col text-center">
-                <span className="font-bold">Criar Usuário</span>
-                <span className="text-[10px] text-muted-foreground font-normal">Nova conta no XUI</span>
+                <span className="font-bold text-sm sm:text-base">Criar Usuário</span>
+                <span className="text-[9px] sm:text-[10px] text-muted-foreground font-normal">Nova conta no XUI</span>
               </div>
             </Button>
-            <Button variant="outline" className="h-24 flex flex-col gap-2 hover:border-primary/50 hover:bg-primary/5 transition-all">
-              <Play className="w-6 h-6 text-primary" />
+            <Button variant="outline" className="h-20 sm:h-24 flex flex-col gap-1 sm:gap-2 hover:border-primary/50 hover:bg-primary/5 transition-all">
+              <Play className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
               <div className="flex flex-col text-center">
-                <span className="font-bold">Escolher Bouquets</span>
-                <span className="text-[10px] text-muted-foreground font-normal">Gerenciar pacotes</span>
+                <span className="font-bold text-sm sm:text-base">Escolher Bouquets</span>
+                <span className="text-[9px] sm:text-[10px] text-muted-foreground font-normal">Gerenciar pacotes</span>
               </div>
             </Button>
           </div>
