@@ -449,10 +449,10 @@ function Index() {
                   </Button>
                 </CardContent>
               </Card>
-            </div>
           </TabsContent>
 
           <TabsContent value="xui" className="space-y-8 mt-0 outline-none">
+
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <Card className="border-border/50 bg-card/50">
