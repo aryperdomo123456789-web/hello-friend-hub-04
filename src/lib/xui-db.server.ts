@@ -18,7 +18,6 @@ export async function getXuiDb(config: any) {
 
   try {
     // Usamos createConnection diretamente para testes mais rápidos e isolados
-    // Adicionamos flags de SSL desativado se necessário ou simplificamos ao máximo
     const connection = await mysql.createConnection({
       host,
       user,
@@ -26,8 +25,8 @@ export async function getXuiDb(config: any) {
       database,
       port,
       connectTimeout: 15000,
-      // Desativar SSL se o servidor não suportar ou se causar erros no worker
-      ssl: false 
+      // Se SSL causar problemas no worker, aqui é onde configuramos
+      // ssl: { rejectUnauthorized: false }
     });
     
     return connection;
