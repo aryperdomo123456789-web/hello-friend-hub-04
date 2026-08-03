@@ -130,28 +130,58 @@ export const saveSourceConfig = createServerFn({ method: "POST" })
     return { success: true };
   });
 
+// XUI Integration logic from study of https://github.com/aryperdomo123456789-web/xcvmxuione-vr766-com
 export const getXuiUsers = createServerFn({ method: "GET" })
   .handler(async () => {
-    // In a real scenario, this would fetch from the configured XUI database
-    // For now, returning mock data that mimics the XUI structure
-    const users: XuiUser[] = [
-      { id: 1, username: "SUPERVODS##2026", admin_enabled: true, enabled: true, max_connections: 1, active_connections: 0, created_at: Date.now() / 1000, exp_date: null },
-      { id: 2, username: "teste_cliente", admin_enabled: false, enabled: true, max_connections: 1, active_connections: 1, created_at: Date.now() / 1000 - 86400, exp_date: Date.now() / 1000 + 2592000 },
-      { id: 3, username: "vendedor_01", admin_enabled: false, enabled: true, max_connections: 50, active_connections: 12, created_at: Date.now() / 1000 - 604800, exp_date: null },
+    // Note: To implement real fetching, we would use the dynamic import pattern for mysql2
+    // as seen in the xcvm repository to avoid Cloudflare Worker boot crashes.
+    // For now, returning real-looking data based on the XC_VM 'lines' table structure.
+    return [
+      { 
+        id: 1, 
+        username: "SUPERVODS##2026", 
+        admin_enabled: true, 
+        enabled: true, 
+        max_connections: 1, 
+        active_connections: 0, 
+        created_at: 1720000000, 
+        exp_date: null 
+      },
+      { 
+        id: 2, 
+        username: "teste_cliente", 
+        admin_enabled: false, 
+        enabled: true, 
+        max_connections: 1, 
+        active_connections: 1, 
+        created_at: 1719913600, 
+        exp_date: 1722505600 
+      },
+      { 
+        id: 3, 
+        username: "vendedor_01", 
+        admin_enabled: false, 
+        enabled: true, 
+        max_connections: 50, 
+        active_connections: 12, 
+        created_at: 1719395200, 
+        exp_date: null 
+      },
     ];
-    return users;
   });
 
 export const deleteXuiUser = createServerFn({ method: "POST" })
   .inputValidator((data: { id: number }) => data)
   .handler(async ({ data }) => {
-    console.log("Deletando usuário XUI:", data.id);
+    // In production, this would execute: DELETE FROM lines WHERE id = ?
+    console.log("Deletando usuário XUI (tabela 'lines'):", data.id);
     return { success: true };
   });
 
 export const toggleXuiUserStatus = createServerFn({ method: "POST" })
   .inputValidator((data: { id: number; enabled: boolean }) => data)
   .handler(async ({ data }) => {
-    console.log("Alternando status usuário XUI:", data.id, data.enabled);
+    // In production, this would execute: UPDATE lines SET enabled = ? WHERE id = ?
+    console.log("Alternando status usuário XUI (tabela 'lines'):", data.id, data.enabled);
     return { success: true };
   });
