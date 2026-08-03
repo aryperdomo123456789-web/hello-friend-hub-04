@@ -222,8 +222,23 @@ export const deleteXuiUser = createServerFn({ method: "POST" })
   .inputValidator((data: { id: number }) => data)
   .handler(async ({ data }) => {
     try {
+      const { data: source } = await supabaseAdmin
+        .from("sources")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .single();
+
+      if (!source) throw new Error("Configuração da fonte XUI não encontrada.");
+
       const { getXuiDb } = await import("./xui-db.server");
-      const db = await getXuiDb({});
+      const db = await getXuiDb({
+        ip: source.ip,
+        port: source.db_port,
+        user: source.db_user,
+        password: source.db_password,
+        database: source.db_name
+      });
       await db.query("DELETE FROM lines WHERE id = ?", [data.id]);
       await db.end();
       return { success: true };
@@ -237,8 +252,23 @@ export const toggleXuiUserStatus = createServerFn({ method: "POST" })
   .inputValidator((data: { id: number; enabled: boolean }) => data)
   .handler(async ({ data }) => {
     try {
+      const { data: source } = await supabaseAdmin
+        .from("sources")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .single();
+
+      if (!source) throw new Error("Configuração da fonte XUI não encontrada.");
+
       const { getXuiDb } = await import("./xui-db.server");
-      const db = await getXuiDb({});
+      const db = await getXuiDb({
+        ip: source.ip,
+        port: source.db_port,
+        user: source.db_user,
+        password: source.db_password,
+        database: source.db_name
+      });
       await db.query("UPDATE lines SET enabled = ? WHERE id = ?", [data.enabled ? 1 : 0, data.id]);
       await db.end();
       return { success: true };
