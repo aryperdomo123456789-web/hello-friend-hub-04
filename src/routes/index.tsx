@@ -309,8 +309,9 @@ function Index() {
               </CardContent>
             </Card>
           </div>
-          </div>
-          </TabsContent>
+        </div>
+      </TabsContent>
+
 
           <TabsContent value="domains" className="space-y-8 mt-0 outline-none">
             <Card className="border-border/50 bg-card/50 overflow-hidden">
