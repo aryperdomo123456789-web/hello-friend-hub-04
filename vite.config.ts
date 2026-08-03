@@ -26,9 +26,9 @@ export default defineConfig({
       'global': 'globalThis',
     },
     ssr: {
-      // Explicitly externalize mysql2 to let workerd's nodejs_compat handle it
-      external: ['mysql2'],
-      noExternal: ['process', 'stream-browserify', 'buffer', 'util', '@supabase/supabase-js'],
+      // Forçamos o bundling de mysql2 para garantir que os aliases e defines sejam aplicados
+      // e para evitar dependência do ambiente node do Cloudflare caso ele esteja inconsistente
+      noExternal: ['mysql2', 'process', 'stream-browserify', 'buffer', 'util', '@supabase/supabase-js'],
     },
   },
 });
