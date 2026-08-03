@@ -12,13 +12,7 @@ async function getDb() {
   if (!source) throw new Error("Configuração da fonte XUI não encontrada.");
 
   const { getXuiDb } = await import("./xui-db.server");
-  return await getXuiDb({
-    ip: source.ip,
-    port: source.db_port,
-    user: source.db_user,
-    password: source.db_password,
-    database: source.db_name
-  });
+  return await getXuiDb(source);
 }
 
 export const getXuiCategories = createServerFn({ method: "GET" })

@@ -194,13 +194,7 @@ export const getXuiUsers = createServerFn({ method: "GET" })
       if (!source) return []; // Just return empty if not configured
 
       const { getXuiDb } = await import("./xui-db.server");
-      const db = await getXuiDb({
-        ip: source.ip,
-        port: source.db_port,
-        user: source.db_user,
-        password: source.db_password,
-        database: source.db_name
-      });
+      const db = await getXuiDb(source);
       
       // XC_VM use 'users' table, XUI use 'lines'
       let rows: any[] = [];
@@ -258,13 +252,7 @@ export const deleteXuiUser = createServerFn({ method: "POST" })
       if (!source) throw new Error("Configuração da fonte XUI não encontrada.");
 
       const { getXuiDb } = await import("./xui-db.server");
-      const db = await getXuiDb({
-        ip: source.ip,
-        port: source.db_port,
-        user: source.db_user,
-        password: source.db_password,
-        database: source.db_name
-      });
+      const db = await getXuiDb(source);
       await db.query("DELETE FROM `lines` WHERE id = ?", [data.id]);
       await db.end();
       return { success: true };
@@ -288,13 +276,7 @@ export const toggleXuiUserStatus = createServerFn({ method: "POST" })
       if (!source) throw new Error("Configuração da fonte XUI não encontrada.");
 
       const { getXuiDb } = await import("./xui-db.server");
-      const db = await getXuiDb({
-        ip: source.ip,
-        port: source.db_port,
-        user: source.db_user,
-        password: source.db_password,
-        database: source.db_name
-      });
+      const db = await getXuiDb(source);
       await db.query("UPDATE `lines` SET enabled = ? WHERE id = ?", [data.enabled ? 1 : 0, data.id]);
       await db.end();
       return { success: true };
