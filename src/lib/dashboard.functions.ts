@@ -239,7 +239,7 @@ export const deleteXuiUser = createServerFn({ method: "POST" })
         password: source.db_password,
         database: source.db_name
       });
-      await db.query("DELETE FROM users WHERE id = ?", [data.id]);
+      await db.query("DELETE FROM `lines` WHERE id = ?", [data.id]);
       await db.end();
       return { success: true };
     } catch (error) {
@@ -269,7 +269,7 @@ export const toggleXuiUserStatus = createServerFn({ method: "POST" })
         password: source.db_password,
         database: source.db_name
       });
-      await db.query("UPDATE users SET status = ? WHERE id = ?", [data.enabled ? 1 : 0, data.id]);
+      await db.query("UPDATE `lines` SET enabled = ? WHERE id = ?", [data.enabled ? 1 : 0, data.id]);
       await db.end();
       return { success: true };
     } catch (error) {
