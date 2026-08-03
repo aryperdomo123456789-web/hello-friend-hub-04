@@ -9,6 +9,8 @@ import { Badge } from "@/components/ui/badge";
 
 export function ContentTab() {
   const [search, setSearch] = useState("");
+  const [activeTypeTab, setActiveTypeTab] = useState("categories");
+  const [activeCategoryFilter, setActiveCategoryFilter] = useState("all");
 
   const { data: categories = [] } = useQuery({
     queryKey: ["xui-categories"],
@@ -35,58 +37,98 @@ export function ContentTab() {
     queryFn: () => getXuiEpisodes(),
   });
 
-  const filterData = (data: any[]) => (data || []).filter(item => 
-    (item.name || item.title || "").toLowerCase().includes(search.toLowerCase())
-  );
+  const filterData = (data: any[], type?: string) => {
+    let filtered = data || [];
+    
+    // Global text search
+    if (search) {
+      filtered = filtered.filter(item => 
+        (item.name || item.title || "").toLowerCase().includes(search.toLowerCase()) ||
+        (item.id?.toString() || "").includes(search)
+      );
+    }
+
+    // Category filtering
+    if (type && activeCategoryFilter !== "all") {
+      filtered = filtered.filter(item => item.category_id?.toString() === activeCategoryFilter);
+    }
+
+    return filtered;
+  };
+
+  const movieCategories = categories.filter(c => c.type === 'movie');
+  const liveCategories = categories.filter(c => c.type === 'live');
+  const seriesCategories = categories.filter(c => c.type === 'series');
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4 max-w-md">
-        <Input 
-          placeholder="Pesquisar conteúdo..." 
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="bg-card/50 border-border/50"
-        />
+      <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
+        <div className="relative w-full max-w-md">
+          <Input 
+            placeholder="Pesquisar em tudo..." 
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="bg-card/50 border-border/50 pl-4 h-11 rounded-xl focus-visible:ring-primary"
+          />
+        </div>
+
+        {activeTypeTab !== "categories" && activeTypeTab !== "episodes" && (
+          <select 
+            className="bg-card/50 border border-border/50 rounded-xl h-11 px-4 text-sm outline-none focus:ring-1 focus:ring-primary min-w-[200px]"
+            value={activeCategoryFilter}
+            onChange={(e) => setActiveCategoryFilter(e.target.value)}
+          >
+            <option value="all">Todas as Categorias</option>
+            {(activeTypeTab === "live" ? liveCategories : 
+              activeTypeTab === "movies" ? movieCategories : 
+              seriesCategories).map(cat => (
+              <option key={cat.id} value={cat.id}>{cat.name}</option>
+            ))}
+          </select>
+        )}
       </div>
 
-      <Tabs defaultValue="categories" className="w-full">
-        <TabsList className="bg-card/50 border border-border/50 p-1 rounded-xl mb-6">
-          <TabsTrigger value="categories" className="rounded-lg gap-2 font-bold data-[state=active]:bg-primary">
+      <Tabs defaultValue="categories" value={activeTypeTab} onValueChange={setActiveTypeTab} className="w-full">
+        <TabsList className="bg-card/50 border border-border/50 p-1 rounded-xl mb-6 flex-wrap h-auto gap-1">
+          <TabsTrigger value="categories" className="rounded-lg gap-2 font-bold data-[state=active]:bg-primary flex-1">
             <LayoutGrid className="w-4 h-4" /> Categorias
           </TabsTrigger>
-          <TabsTrigger value="live" className="rounded-lg gap-2 font-bold data-[state=active]:bg-primary">
+          <TabsTrigger value="live" className="rounded-lg gap-2 font-bold data-[state=active]:bg-primary flex-1">
             <Tv className="w-4 h-4" /> Canais
           </TabsTrigger>
-          <TabsTrigger value="movies" className="rounded-lg gap-2 font-bold data-[state=active]:bg-primary">
+          <TabsTrigger value="movies" className="rounded-lg gap-2 font-bold data-[state=active]:bg-primary flex-1">
             <Film className="w-4 h-4" /> Filmes
           </TabsTrigger>
-          <TabsTrigger value="series" className="rounded-lg gap-2 font-bold data-[state=active]:bg-primary">
+          <TabsTrigger value="series" className="rounded-lg gap-2 font-bold data-[state=active]:bg-primary flex-1">
             <Layers className="w-4 h-4" /> Séries
           </TabsTrigger>
-          <TabsTrigger value="episodes" className="rounded-lg gap-2 font-bold data-[state=active]:bg-primary">
+          <TabsTrigger value="episodes" className="rounded-lg gap-2 font-bold data-[state=active]:bg-primary flex-1">
             <PlayCircle className="w-4 h-4" /> Episódios
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="categories">
-          <ContentTable title="Categorias" items={filterData(categories)} columns={["ID", "Nome", "Tipo"]} />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <ContentTable title="Categorias Canais" items={filterData(liveCategories)} columns={["ID", "Nome"]} />
+            <ContentTable title="Categorias Filmes" items={filterData(movieCategories)} columns={["ID", "Nome"]} />
+            <ContentTable title="Categorias Séries" items={filterData(seriesCategories)} columns={["ID", "Nome"]} />
+          </div>
         </TabsContent>
 
         <TabsContent value="live">
-          <ContentTable title="Canais ao Vivo" items={filterData(liveStreams)} columns={["ID", "Capa", "Nome", "Categoria"]} />
+          <ContentTable title="Canais ao Vivo" items={filterData(liveStreams, 'live')} columns={["ID", "Capa", "Nome"]} />
         </TabsContent>
 
         <TabsContent value="movies">
-          <ContentTable title="Filmes VOD" items={filterData(movies)} columns={["ID", "Capa", "Nome", "Categoria"]} />
+          <ContentTable title="Filmes VOD" items={filterData(movies, 'movies')} columns={["ID", "Capa", "Nome"]} />
         </TabsContent>
 
         <TabsContent value="series">
-          <ContentTable title="Séries de TV" items={filterData(series)} columns={["ID", "Nome", "Categoria"]} />
+          <ContentTable title="Séries de TV" items={filterData(series, 'series')} columns={["ID", "Nome"]} />
         </TabsContent>
 
         <TabsContent value="episodes">
-          <ContentTable title="Episódios" items={filterData(episodes)} columns={["ID", "Série ID", "Título", "Temporada", "Episódio"]} />
+          <ContentTable title="Episódios" items={filterData(episodes)} columns={["ID", "Série", "Título", "Temporada", "Episódio"]} />
         </TabsContent>
       </Tabs>
     </div>
@@ -95,23 +137,26 @@ export function ContentTab() {
 
 function ContentTable({ title, items, columns }: { title: string, items: any[], columns: string[] }) {
   return (
-    <Card className="border-border/50 bg-card/50 overflow-hidden rounded-2xl">
+    <Card className="border-border/50 bg-card/50 overflow-hidden rounded-2xl shadow-sm">
       <CardHeader className="border-b border-border/50 bg-accent/5 py-4">
-        <CardTitle className="text-lg font-bold">{title} ({items.length})</CardTitle>
+        <CardTitle className="text-md font-bold flex items-center justify-between">
+          <span>{title}</span>
+          <Badge variant="secondary" className="bg-primary/10 text-primary border-none">{items.length}</Badge>
+        </CardTitle>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="overflow-x-auto">
+        <div className="max-h-[500px] overflow-y-auto">
           <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-muted/30 text-[10px] uppercase tracking-wider font-bold text-muted-foreground border-b border-border/50">
-                {columns.map(col => <th key={col} className="px-6 py-4">{col}</th>)}
+            <thead className="sticky top-0 bg-card/95 backdrop-blur-sm z-10 shadow-sm">
+              <tr className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground border-b border-border/50">
+                {columns.map(col => <th key={col} className="px-4 py-3">{col}</th>)}
               </tr>
             </thead>
             <tbody className="divide-y divide-border/40">
               {items.map((item, idx) => (
-                <tr key={idx} className="hover:bg-accent/10 transition-colors">
+                <tr key={idx} className="hover:bg-accent/10 transition-colors group">
                   {columns.map(col => (
-                    <td key={col} className="px-6 py-4 text-sm">
+                    <td key={col} className="px-4 py-3 text-sm">
                       {renderCell(col, item)}
                     </td>
                   ))}
@@ -119,7 +164,7 @@ function ContentTable({ title, items, columns }: { title: string, items: any[], 
               ))}
               {items.length === 0 && (
                 <tr>
-                  <td colSpan={columns.length} className="px-6 py-12 text-center text-muted-foreground">
+                  <td colSpan={columns.length} className="px-6 py-12 text-center text-muted-foreground italic">
                     Nenhum registro encontrado.
                   </td>
                 </tr>
@@ -134,15 +179,15 @@ function ContentTable({ title, items, columns }: { title: string, items: any[], 
 
 function renderCell(col: string, item: any) {
   switch (col) {
-    case "ID": return item.id;
+    case "ID": return <span className="text-muted-foreground font-mono text-xs">{item.id}</span>;
     case "Nome": return <span className="font-bold">{item.name}</span>;
-    case "Tipo": return <Badge variant="outline" className="uppercase text-[10px]">{item.type}</Badge>;
-    case "Capa": return item.stream_icon ? <img src={item.stream_icon} className="w-10 h-14 object-cover rounded-lg bg-muted" alt="" /> : <div className="w-10 h-14 bg-muted rounded-lg" />;
-    case "Categoria": return item.category_id;
-    case "Série ID": return item.series_id;
-    case "Título": return <span className="font-bold">{item.title}</span>;
-    case "Temporada": return item.season_num;
-    case "Episódio": return item.episode_num;
+    case "Tipo": return <Badge variant="outline" className="uppercase text-[9px] px-1.5 h-4">{item.type}</Badge>;
+    case "Capa": return item.stream_icon ? <img src={item.stream_icon} className="w-8 h-12 object-cover rounded-md bg-muted shadow-sm group-hover:scale-105 transition-transform" alt="" /> : <div className="w-8 h-12 bg-muted rounded-md" />;
+    case "Categoria": return <span className="text-xs text-muted-foreground">{item.category_id}</span>;
+    case "Série": return <span className="text-xs font-medium text-muted-foreground">{item.series_id || item.series_name}</span>;
+    case "Título": return <span className="font-bold text-xs">{item.title}</span>;
+    case "Temporada": return <Badge variant="secondary" className="h-5 text-[10px]">T{item.season_num}</Badge>;
+    case "Episódio": return <Badge variant="outline" className="h-5 text-[10px]">E{item.episode_num}</Badge>;
     default: return "";
   }
 }
