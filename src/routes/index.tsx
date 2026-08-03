@@ -449,7 +449,9 @@ function Index() {
                   </Button>
                 </CardContent>
               </Card>
+            </div>
           </TabsContent>
+
 
           <TabsContent value="xui" className="space-y-8 mt-0 outline-none">
 
