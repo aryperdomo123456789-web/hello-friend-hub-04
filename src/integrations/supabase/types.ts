@@ -165,6 +165,7 @@ export type Database = {
           id: string
           ip: string
           name: string
+          origin_type: string | null
           panel_url: string | null
           root_user: string | null
           updated_at: string | null
@@ -180,6 +181,7 @@ export type Database = {
           id?: string
           ip: string
           name: string
+          origin_type?: string | null
           panel_url?: string | null
           root_user?: string | null
           updated_at?: string | null
@@ -195,6 +197,7 @@ export type Database = {
           id?: string
           ip?: string
           name?: string
+          origin_type?: string | null
           panel_url?: string | null
           root_user?: string | null
           updated_at?: string | null
