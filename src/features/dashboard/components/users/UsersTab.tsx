@@ -52,9 +52,10 @@ export function UsersTab() {
     }
   });
 
-  const filteredUsers = users.filter(u => 
+  const filteredUsers = users.filter((u: XuiUser) => 
     u.username.toLowerCase().includes(search.toLowerCase())
   );
+
 
   return (
     <div className="space-y-6 outline-none">
@@ -108,7 +109,7 @@ export function UsersTab() {
                     </td>
                   </tr>
                 ) : (
-                  filteredUsers.map((user) => (
+                  filteredUsers.map((user: XuiUser) => (
                     <tr key={user.id} className="hover:bg-accent/10 transition-colors group">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
