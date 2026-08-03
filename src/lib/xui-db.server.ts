@@ -1,4 +1,4 @@
-import mysql from 'mysql2/promise';
+import mysql from 'mysql2';
 
 /**
  * Nota sobre compatibilidade Edge:
@@ -17,7 +17,7 @@ export async function getXuiDb(config: any) {
   console.log(`[MySQL] Tentando conectar em ${host}:${port} (user: ${user}, db: ${database})`);
 
   try {
-    // Usamos createConnection diretamente para testes mais rápidos e isolados
+    // Usamos o driver que suporta ambiente de worker sem depender de binários nativos
     const connection = await mysql.createConnection({
       host,
       user,
@@ -25,11 +25,10 @@ export async function getXuiDb(config: any) {
       database,
       port,
       connectTimeout: 15000,
-      // Se SSL causar problemas no worker, aqui é onde configuramos
-      // ssl: { rejectUnauthorized: false }
     });
     
-    return connection;
+    // Convertemos para a versão promise manualmente se necessário ou usamos o wrapper nativo
+    return connection.promise();
   } catch (error: any) {
     console.error("[MySQL] Erro ao criar conexão:", error.message);
     throw error;

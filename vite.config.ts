@@ -18,6 +18,7 @@ export default defineConfig({
         "node:stream": "stream-browserify",
         "node:buffer": "buffer",
         "process": "process/browser",
+        "mysql2/promise": "mysql2/dist/mysql.js",
         "mysql2": "mysql2/dist/mysql.js",
       },
     },
