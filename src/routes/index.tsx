@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getDashboardStats, getSources, getMuscles } from "@/lib/dashboard.functions";
-import { Server, Activity, Database, ShieldCheck, ChevronRight, ArrowUpRight } from "lucide-react";
+import { Server, Activity, Database, ShieldCheck, ChevronRight, ArrowUpRight, Moon } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -42,19 +43,29 @@ function Index() {
   });
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-4 md:p-8 font-sans">
+    <div className="min-h-screen bg-background text-foreground p-4 md:p-8 font-sans transition-colors duration-300">
       <div className="max-w-7xl mx-auto space-y-8">
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">CDN Voods - Cérebro</h1>
-            <p className="text-muted-foreground mt-1">
-              Gerenciamento centralizado de origens e load balancers (músculos).
-            </p>
+          <div className="flex items-center justify-between w-full md:w-auto">
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight">CDN Voods - Cérebro</h1>
+              <p className="text-muted-foreground mt-1 text-sm md:text-base">
+                Gerenciamento centralizado de origens e load balancers (músculos).
+              </p>
+            </div>
+            <div className="md:hidden">
+              <ThemeToggle />
+            </div>
           </div>
-          <Badge variant="outline" className="w-fit flex items-center gap-1 py-1 px-3">
-            <ShieldCheck className="w-3 h-3 text-green-500" />
-            <span className="text-xs uppercase font-semibold">Sistema Ativo</span>
-          </Badge>
+          <div className="flex items-center gap-3">
+            <Badge variant="outline" className="w-fit flex items-center gap-1 py-1 px-3 bg-card/50 backdrop-blur-sm border-border/50">
+              <ShieldCheck className="w-3 h-3 text-green-500" />
+              <span className="text-xs uppercase font-semibold">Sistema Ativo</span>
+            </Badge>
+            <div className="hidden md:block">
+              <ThemeToggle />
+            </div>
+          </div>
         </header>
 
         {/* Stats Grid */}
