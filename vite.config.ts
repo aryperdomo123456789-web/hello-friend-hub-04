@@ -18,6 +18,7 @@ export default defineConfig({
         "node:stream": "stream-browserify",
         "node:buffer": "buffer",
         "process": "process/browser",
+        "lru.min": "lru-cache",
       },
     },
     define: {
