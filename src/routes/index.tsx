@@ -523,12 +523,6 @@ function Index() {
             O sistema agora está pronto para proteger seu painel XUI. Ao instalar um <strong>Músculo (LB)</strong>, o tráfego dos clientes passa pela VPS protegida, ocultando o IP real da sua fonte <code>38.190.176.170</code>. Use o script de instalação para configurar automaticamente o Nginx Proxy otimizado.
           </p>
         </div>
-      </div>
-    </div>
-
-
-      </div>
-    </div>
   );
 }
 
