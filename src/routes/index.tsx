@@ -53,9 +53,6 @@ function Index() {
   const { data: live } = useSuspenseQuery({ queryKey: ["live"], queryFn: () => getLiveConnections() });
   const { data: health } = useSuspenseQuery({ queryKey: ["health"], queryFn: () => getHostHealth() });
 
-  const { data: muscles } = useSuspenseQuery({ queryKey: ["muscles"], queryFn: () => getMuscles() });
-  const { data: live } = useSuspenseQuery({ queryKey: ["live"], queryFn: () => getLiveConnections() });
-  const { data: health } = useSuspenseQuery({ queryKey: ["health"], queryFn: () => getHostHealth() });
 
   return (
     <div className="min-h-screen bg-background text-foreground p-4 md:p-8 font-sans transition-colors duration-300">
