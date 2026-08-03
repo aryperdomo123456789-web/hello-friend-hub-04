@@ -14,7 +14,86 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      muscles: {
+        Row: {
+          created_at: string | null
+          id: string
+          ip: string
+          last_seen: string | null
+          name: string
+          source_id: string | null
+          status: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          ip: string
+          last_seen?: string | null
+          name: string
+          source_id?: string | null
+          status?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          ip?: string
+          last_seen?: string | null
+          name?: string
+          source_id?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "muscles_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sources: {
+        Row: {
+          api_url: string | null
+          created_at: string | null
+          db_name: string | null
+          db_port: number | null
+          db_user: string | null
+          id: string
+          ip: string
+          name: string
+          panel_url: string | null
+          root_user: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          api_url?: string | null
+          created_at?: string | null
+          db_name?: string | null
+          db_port?: number | null
+          db_user?: string | null
+          id?: string
+          ip: string
+          name: string
+          panel_url?: string | null
+          root_user?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          api_url?: string | null
+          created_at?: string | null
+          db_name?: string | null
+          db_port?: number | null
+          db_user?: string | null
+          id?: string
+          ip?: string
+          name?: string
+          panel_url?: string | null
+          root_user?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
