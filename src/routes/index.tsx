@@ -92,7 +92,7 @@ function Index() {
             <div>
               <h1 className="text-3xl font-bold tracking-tighter">CDN Voods</h1>
               <p className="text-muted-foreground mt-1 text-sm md:text-base">
-                O domínio principal (Main/Cérebro) gerencia as origens e os load balancers (Músculos).
+                O domínio principal (Main/Cérebro) gerencia as origens e os load balancers (Músculos). <span className="text-destructive font-bold">Aguardando reconexão...</span>
               </p>
             </div>
             <div className="md:hidden">

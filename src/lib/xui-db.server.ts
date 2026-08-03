@@ -9,6 +9,7 @@ import mysql from 'mysql2/promise';
 
 export async function getXuiDb(config: any) {
   // Garantir que process e process.nextTick existam (polyfills de borda)
+  // Nota: Isso ajuda a evitar o erro "No such module node:process" em alguns contextos de importação
   if (typeof globalThis !== 'undefined' && !globalThis.process) {
     (globalThis as any).process = { 
       env: {}, 
@@ -33,13 +34,15 @@ export async function getXuiDb(config: any) {
       password,
       database,
       port,
-      connectTimeout: 15000,
+      connectTimeout: 20000, // Aumentado para 20s para maior estabilidade
       // Desabilita eval para compatibilidade com ambientes que bloqueiam eval()
       disableEval: true,
       // Aumenta a tolerância para servidores legados
       waitForConnections: true,
       connectionLimit: 1,
-      queueLimit: 0
+      queueLimit: 0,
+      enableKeepAlive: true,
+      keepAliveInitialDelay: 10000
     };
 
     const connection = await mysql.createConnection(connectionOptions);
