@@ -262,11 +262,11 @@ function Index() {
         {/* Info Box */}
         <div className="p-6 rounded-2xl bg-primary/5 border border-primary/10 space-y-3">
           <div className="flex items-center gap-2 text-primary">
-            <Activity className="w-5 h-5" />
-            <h3 className="font-bold text-lg">Próximos Passos do Backup</h3>
+            <Shield className="w-5 h-5" />
+            <h3 className="font-bold text-lg">Proteção XUI Ativa</h3>
           </div>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            O "Cérebro" agora tem os dados do laboratório (XUI: 38.190.176.170). O próximo passo é implementar o instalador SSH para converter qualquer VPS comum em um "Músculo" configurado com Nginx Proxy otimizado para IPTV.
+            O sistema agora está pronto para proteger seu painel XUI. Ao instalar um <strong>Músculo (LB)</strong>, o tráfego dos clientes passa pela VPS protegida, ocultando o IP real da sua fonte <code>38.190.176.170</code>. Use o script de instalação para configurar automaticamente o Nginx Proxy otimizado.
           </p>
         </div>
       </div>
