@@ -3,7 +3,10 @@ import mysql from 'mysql2/promise';
 // Mock de lru.min se necessário para compatibilidade com versões específicas do mysql2
 if (typeof globalThis !== 'undefined') {
   (globalThis as any)['lru.min'] = (globalThis as any).LRUCache || {};
+  // Alguns ambientes podem procurar por 'lru-cache/min' ou apenas 'lru'
+  (globalThis as any)['lru-cache/min'] = (globalThis as any).LRUCache || {};
 }
+
 
 
 /**
