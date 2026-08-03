@@ -92,7 +92,8 @@ function Index() {
             <div>
               <h1 className="text-3xl font-bold tracking-tighter">CDN Voods</h1>
               <p className="text-muted-foreground mt-1 text-sm md:text-base">
-                O domínio principal (Main/Cérebro) gerencia as origens e os load balancers (Músculos).
+                me ajdue um comando por vez prepara a vps para o sistema ??
+                a vps ta formatada limpa me mande um comando por vez paar prepaar ela para deposi comitar e me indica qual diretorio devo fazer /home?
               </p>
             </div>
             <div className="md:hidden">
