@@ -25,6 +25,9 @@ export default defineConfig({
       'process.version': '"v18.0.0"',
       'process.nextTick': '((fn, ...args) => setTimeout(() => fn(...args), 0))',
       'global': 'globalThis',
-    }
+    },
+    ssr: {
+      noExternal: ['mysql2', 'process', 'stream-browserify', 'buffer', 'util'],
+    },
   },
 });
