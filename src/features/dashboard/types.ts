@@ -22,7 +22,7 @@ export interface Source {
   id: string;
   name: string;
   ip: string;
-  db_port?: number;
+  db_port?: number | null;
   db_name?: string;
   db_user?: string;
   db_password?: string;
