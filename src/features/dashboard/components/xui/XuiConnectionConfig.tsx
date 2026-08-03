@@ -59,10 +59,13 @@ export function XuiConnectionConfig() {
                 </Button>
               </div>
             </div>
-            <div className="flex items-end h-full pb-1">
-              <Button className="w-full gap-2 shadow-lg shadow-primary/20">
+            <div className="flex items-end gap-3 h-full pb-1">
+              <Button className="flex-1 gap-2 shadow-lg shadow-primary/20 bg-green-600 hover:bg-green-700">
                 <RefreshCw className="w-4 h-4" />
                 Testar Conexão
+              </Button>
+              <Button className="flex-1 gap-2 shadow-lg shadow-primary/20">
+                Salvar Configurações
               </Button>
             </div>
           </div>
