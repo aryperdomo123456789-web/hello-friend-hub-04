@@ -30,6 +30,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { useDashboardData } from "@/features/dashboard/hooks/use-dashboard-data";
 import { StatCard } from "@/features/dashboard/components/StatCard";
 import { LiveConnectionsTable } from "@/features/dashboard/components/live/LiveConnectionsTable";
+import { SubscriberParkTable } from "@/features/dashboard/components/live/SubscriberParkTable";
 import { SourceList } from "@/features/dashboard/components/live/SourceList";
 import { MuscleList } from "@/features/dashboard/components/muscles/MuscleList";
 import { XuiConnectionConfig } from "@/features/dashboard/components/xui/XuiConnectionConfig";
@@ -89,7 +90,7 @@ function Index() {
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center justify-between w-full md:w-auto">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight">CDN Voods - Cérebro</h1>
+              <h1 className="text-3xl font-bold tracking-tighter">CDN Voods</h1>
               <p className="text-muted-foreground mt-1 text-sm md:text-base">
                 Gerenciamento centralizado de origens e load balancers (músculos).
               </p>
@@ -111,9 +112,13 @@ function Index() {
 
         <Tabs defaultValue="live" className="w-full space-y-6">
           <TabsList className="bg-card/50 border border-border/50 p-1 rounded-xl h-auto flex gap-1 overflow-x-auto no-scrollbar justify-start mb-6">
+            <div className="flex items-center gap-1 px-2 border-r border-border/50 mr-1">
+              <span className="text-[10px] font-bold text-muted-foreground uppercase whitespace-nowrap">Dashboard</span>
+            </div>
+
             <TabsTrigger value="live" className="gap-2 px-3 sm:px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-nowrap text-xs sm:text-sm">
               <Activity className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-              <span className="hidden xs:inline">Rastreamento ao Vivo</span>
+              <span className="hidden xs:inline">Rastreio ao vivo do tráfego</span>
               <span className="xs:hidden">Live</span>
             </TabsTrigger>
             <TabsTrigger value="xui" className="gap-2 px-3 sm:px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-nowrap text-xs sm:text-sm">
@@ -145,15 +150,16 @@ function Index() {
           </TabsList>
 
           <TabsContent value="live" className="space-y-8 mt-4 outline-none">
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-              <StatCard label="Conexões" value={stats.liveConnections} />
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-9 gap-2">
+              <StatCard label="Conexões Vivas" value={stats.liveConnections} />
               <StatCard label="Transmitindo" value={stats.streamingCount} />
               <StatCard label="Canais" value={stats.channelsCount} />
               <StatCard label="Filmes" value={stats.moviesCount} />
               <StatCard label="Séries" value={stats.seriesCount} />
-              <StatCard label="Assinantes" value={stats.liveConnections} />
-              <StatCard label="IPs" value={stats.distinctIps} />
-              <StatCard label="Slots" value={stats.slotsSold} />
+              <StatCard label="Direct Source" value={6} />
+              <StatCard label="Assinantes Online" value={stats.liveConnections} />
+              <StatCard label="Ips Distintos" value={stats.distinctIps} />
+              <StatCard label="Slots Vendidos" value={stats.slotsSold} />
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -165,12 +171,15 @@ function Index() {
                       <CardTitle className="text-xl font-bold flex items-center gap-2">Ao Vivo</CardTitle>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Badge variant="outline" className="text-[10px] font-mono opacity-70">
-                        ao vivo · fonte 1s · consulta 60ms
+                      <Badge variant="outline" className="text-[10px] font-mono opacity-70 bg-green-500/5 text-green-500 border-green-500/20">
+                        ao vivo · fonte 9s · consulta 14ms
                       </Badge>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={() => refetchAll()}>
-                        <RefreshCw className="w-4 h-4" />
-                      </Button>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] text-muted-foreground">atualizado 16:36:41</span>
+                        <Button variant="ghost" size="sm" className="h-8 text-[10px] font-bold text-muted-foreground hover:bg-accent/50">
+                          pausar auto-refresh
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </CardHeader>
@@ -181,14 +190,28 @@ function Index() {
                       <Input placeholder="filtrar usuário ou IP" className="pl-9 h-9 bg-background/50 border-border/50" />
                     </div>
                     <div className="flex items-center gap-1 overflow-x-auto pb-1 md:pb-0">
-                      <Button variant="secondary" size="sm" className="h-8 rounded-full px-4 text-xs font-semibold">todas</Button>
-                      <Button variant="ghost" size="sm" className="h-8 rounded-full px-4 text-xs font-semibold hover:bg-accent/50">canais</Button>
-                      <Button variant="ghost" size="sm" className="h-8 rounded-full px-4 text-xs font-semibold hover:bg-accent/50">filmes</Button>
-                      <Button variant="ghost" size="sm" className="h-8 rounded-full px-4 text-xs font-semibold hover:bg-accent/50">séries</Button>
-                      <Button variant="ghost" size="sm" className="h-8 rounded-full px-4 text-xs font-semibold hover:bg-accent/50">direct</Button>
+                      <Button variant="secondary" size="sm" className="h-8 rounded-full px-4 text-xs font-semibold bg-primary/20 text-primary hover:bg-primary/30">todas</Button>
+                      <Button variant="ghost" size="sm" className="h-8 rounded-full px-4 text-xs font-semibold hover:bg-accent/50 text-muted-foreground">canais</Button>
+                      <Button variant="ghost" size="sm" className="h-8 rounded-full px-4 text-xs font-semibold hover:bg-accent/50 text-muted-foreground">filmes</Button>
+                      <Button variant="ghost" size="sm" className="h-8 rounded-full px-4 text-xs font-semibold hover:bg-accent/50 text-muted-foreground">séries</Button>
+                      <Button variant="ghost" size="sm" className="h-8 rounded-full px-4 text-xs font-semibold hover:bg-accent/50 text-muted-foreground">direct</Button>
+                      <Button variant="ghost" size="sm" className="h-8 rounded-full px-4 text-xs font-semibold hover:bg-accent/50 text-muted-foreground">só transmitindo</Button>
                     </div>
                   </div>
                   <LiveConnectionsTable connections={liveConnections} />
+                  
+                  <div className="border-t border-border/50">
+                    <div className="bg-muted/5 p-4 border-b border-border/50">
+                      <CardTitle className="text-sm font-bold flex items-center gap-2">
+                        ▼ Parque de assinantes (limites e conexões em uso)
+                      </CardTitle>
+                    </div>
+                    <SubscriberParkTable subscribers={[
+                      { username: '4Jknjujtsuper', plan: '1000', inUse: '6', free: '994', direct: '6', lastIp: '200.165.218.103', exit: 'LB-01', status: 'streaming' },
+                      { username: 'Marcio7567', plan: '∞', inUse: '0', free: '∞', direct: '0', lastIp: '189.121.202.70', exit: 'LB-01', status: 'fetching' },
+                      { username: '1111', plan: '1', inUse: '0', free: '1', direct: '0', lastIp: '-', exit: 'main', status: 'idle' }
+                    ]} />
+                  </div>
                 </CardContent>
               </Card>
 
