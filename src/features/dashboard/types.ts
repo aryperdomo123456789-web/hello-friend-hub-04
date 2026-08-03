@@ -65,6 +65,30 @@ export interface XuiUser {
   last_login?: number | null;
 }
 
+export interface XuiCategory {
+  id: number;
+  name: string;
+  type: string;
+}
+
+export interface XuiStream {
+  id: number;
+  name: string;
+  category_id: number;
+  stream_icon?: string;
+  stream_type: string;
+}
+
+export interface XuiEpisode {
+  id: number;
+  series_id: number;
+  title: string;
+  image?: string;
+  season_num: number;
+  episode_num: number;
+}
+
+
 
 export interface HostHealth {
   id: string;

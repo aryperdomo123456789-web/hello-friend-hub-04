@@ -37,6 +37,8 @@ import { XuiOperations } from "@/features/dashboard/components/xui/XuiOperations
 import { DomainsTab } from "@/features/dashboard/components/domains/DomainsTab";
 import { MusclesTab } from "@/features/dashboard/components/muscles/MusclesTab";
 import { UsersTab } from "@/features/dashboard/components/users/UsersTab";
+import { ContentTab } from "@/features/dashboard/components/content/ContentTab";
+
 
 
 export const Route = createFileRoute("/")({
@@ -125,6 +127,12 @@ function Index() {
               <span className="hidden xs:inline">Domínios</span>
               <span className="xs:hidden">DNS</span>
             </TabsTrigger>
+            <TabsTrigger value="content" className="gap-2 px-3 sm:px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-nowrap text-xs sm:text-sm">
+              <Activity className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span className="hidden xs:inline">Conteúdo XUI</span>
+              <span className="xs:hidden">Conteúdo</span>
+            </TabsTrigger>
+
             <TabsTrigger value="lb" className="gap-2 px-3 sm:px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-nowrap text-xs sm:text-sm">
               <Server className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               <span className="hidden xs:inline">Músculos (LB)</span>
@@ -238,6 +246,11 @@ function Index() {
           <TabsContent value="domains" className="space-y-8 mt-4 outline-none">
             <DomainsTab />
           </TabsContent>
+
+          <TabsContent value="content" className="space-y-8 mt-4 outline-none">
+            <ContentTab />
+          </TabsContent>
+
 
           <TabsContent value="lb" className="space-y-8 mt-4 outline-none">
             <MusclesTab muscles={muscles} />
