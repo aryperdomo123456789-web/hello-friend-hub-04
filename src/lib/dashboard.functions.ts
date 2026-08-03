@@ -116,18 +116,32 @@ export const saveSourceConfig = createServerFn({ method: "POST" })
     const { data: existing } = await supabaseAdmin
       .from("sources")
       .select("id")
-      .eq("ip", "38.190.176.170")
+      .eq("ip", data.ip)
       .single();
+
+    const payload = {
+      ip: data.ip,
+      db_port: parseInt(data.port),
+      db_name: data.database,
+      db_user: data.user,
+      db_password: data.password,
+      api_url: data.apiUrl,
+      api_token: data.apiToken,
+      updated_at: new Date().toISOString()
+    };
 
     if (existing) {
       await supabaseAdmin
         .from("sources")
-        .update({
-          ip: data.ip,
-          db_port: parseInt(data.port),
-          api_url: data.apiUrl
-        })
+        .update(payload)
         .eq("id", existing.id);
+    } else {
+      await supabaseAdmin
+        .from("sources")
+        .insert({
+          ...payload,
+          name: "Fonte XUI"
+        });
     }
     return { success: true };
   });
@@ -151,8 +165,23 @@ export const testXuiConnection = createServerFn({ method: "POST" })
 export const getXuiUsers = createServerFn({ method: "GET" })
   .handler(async () => {
     try {
+      const { data: source } = await supabaseAdmin
+        .from("sources")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .single();
+
+      if (!source) return []; // Just return empty if not configured
+
       const { getXuiDb } = await import("./xui-db.server");
-      const db = await getXuiDb({});
+      const db = await getXuiDb({
+        ip: source.ip,
+        port: source.db_port,
+        user: source.db_user,
+        password: source.db_password,
+        database: source.db_name
+      });
       
       const [rows]: any = await db.query(`
         SELECT 
@@ -165,7 +194,8 @@ export const getXuiUsers = createServerFn({ method: "GET" })
           UNIX_TIMESTAMP(created_at) as created_at, 
           exp_date 
         FROM lines 
-        LIMIT 100
+        ORDER BY created_at DESC
+        LIMIT 500
       `);
       await db.end();
 
@@ -179,11 +209,9 @@ export const getXuiUsers = createServerFn({ method: "GET" })
         created_at: row.created_at || Math.floor(Date.now() / 1000),
         exp_date: row.exp_date
       }));
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error fetching real XUI users:", error);
-      return [
-        { id: 1, username: "SUPERVODS##2026", admin_enabled: true, enabled: true, max_connections: 1, active_connections: 0, created_at: 1720000000, exp_date: null },
-      ];
+      throw new Error(`Falha na conexão XUI: ${error.message}`);
     }
   });
 
@@ -191,8 +219,23 @@ export const deleteXuiUser = createServerFn({ method: "POST" })
   .inputValidator((data: { id: number }) => data)
   .handler(async ({ data }) => {
     try {
+      const { data: source } = await supabaseAdmin
+        .from("sources")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .single();
+
+      if (!source) throw new Error("Configuração da fonte XUI não encontrada.");
+
       const { getXuiDb } = await import("./xui-db.server");
-      const db = await getXuiDb({});
+      const db = await getXuiDb({
+        ip: source.ip,
+        port: source.db_port,
+        user: source.db_user,
+        password: source.db_password,
+        database: source.db_name
+      });
       await db.query("DELETE FROM lines WHERE id = ?", [data.id]);
       await db.end();
       return { success: true };
@@ -206,8 +249,23 @@ export const toggleXuiUserStatus = createServerFn({ method: "POST" })
   .inputValidator((data: { id: number; enabled: boolean }) => data)
   .handler(async ({ data }) => {
     try {
+      const { data: source } = await supabaseAdmin
+        .from("sources")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .single();
+
+      if (!source) throw new Error("Configuração da fonte XUI não encontrada.");
+
       const { getXuiDb } = await import("./xui-db.server");
-      const db = await getXuiDb({});
+      const db = await getXuiDb({
+        ip: source.ip,
+        port: source.db_port,
+        user: source.db_user,
+        password: source.db_password,
+        database: source.db_name
+      });
       await db.query("UPDATE lines SET enabled = ? WHERE id = ?", [data.enabled ? 1 : 0, data.id]);
       await db.end();
       return { success: true };

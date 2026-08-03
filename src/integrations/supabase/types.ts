@@ -155,9 +155,11 @@ export type Database = {
       }
       sources: {
         Row: {
+          api_token: string | null
           api_url: string | null
           created_at: string | null
           db_name: string | null
+          db_password: string | null
           db_port: number | null
           db_user: string | null
           id: string
@@ -168,9 +170,11 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
+          api_token?: string | null
           api_url?: string | null
           created_at?: string | null
           db_name?: string | null
+          db_password?: string | null
           db_port?: number | null
           db_user?: string | null
           id?: string
@@ -181,9 +185,11 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
+          api_token?: string | null
           api_url?: string | null
           created_at?: string | null
           db_name?: string | null
+          db_password?: string | null
           db_port?: number | null
           db_user?: string | null
           id?: string

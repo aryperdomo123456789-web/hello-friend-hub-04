@@ -14,7 +14,8 @@ import {
   MoreVertical,
   Calendar,
   Shield,
-  Activity
+  Activity,
+  RefreshCw
 } from "lucide-react";
 import { getXuiUsers, deleteXuiUser, toggleXuiUserStatus } from "@/lib/dashboard.functions";
 import { XuiUser } from "../../types";
@@ -30,9 +31,10 @@ export function UsersTab() {
   const [search, setSearch] = useState("");
   const queryClient = useQueryClient();
 
-  const { data: users = [], isLoading } = useQuery({
+  const { data: users = [], isLoading, error } = useQuery({
     queryKey: ["xui-users"],
-    queryFn: () => getXuiUsers()
+    queryFn: () => getXuiUsers(),
+    retry: 1
   });
 
   const deleteMutation = useMutation({
@@ -60,14 +62,25 @@ export function UsersTab() {
   return (
     <div className="space-y-6 outline-none">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input 
-            placeholder="Buscar por usuário..." 
-            className="pl-9 bg-card/50 border-border/50 h-10"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+        <div className="flex flex-1 items-center gap-3 max-w-2xl">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input 
+              placeholder="Buscar por usuário..." 
+              className="pl-9 bg-card/50 border-border/50 h-10"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+          <Button 
+            variant="outline" 
+            size="icon" 
+            className="h-10 w-10 rounded-xl border-border/50 bg-card/50"
+            onClick={() => queryClient.invalidateQueries({ queryKey: ["xui-users"] })}
+            disabled={isLoading}
+          >
+            <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+          </Button>
         </div>
         <Button className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 h-10 px-6 rounded-xl font-bold shadow-lg shadow-primary/20">
           <UserPlus className="w-4 h-4" />
@@ -100,6 +113,12 @@ export function UsersTab() {
                    <tr>
                     <td colSpan={6} className="px-6 py-12 text-center text-sm text-muted-foreground">
                       carregando usuários...
+                    </td>
+                  </tr>
+                ) : error ? (
+                  <tr>
+                    <td colSpan={6} className="px-6 py-12 text-center text-sm text-destructive font-bold">
+                      Erro ao carregar usuários: {(error as any).message || "Erro de conexão com o banco"}
                     </td>
                   </tr>
                 ) : filteredUsers.length === 0 ? (
