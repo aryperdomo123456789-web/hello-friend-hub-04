@@ -28,8 +28,10 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { useDashboardData } from "@/features/dashboard/hooks/use-dashboard-data";
 import { StatCard } from "@/features/dashboard/components/StatCard";
 import { LiveConnectionsTable } from "@/features/dashboard/components/live/LiveConnectionsTable";
-import { MuscleList } from "@/features/dashboard/components/muscles/MuscleList";
 import { XuiConnectionConfig } from "@/features/dashboard/components/xui/XuiConnectionConfig";
+import { XuiOperations } from "@/features/dashboard/components/xui/XuiOperations";
+import { DomainsTab } from "@/features/dashboard/components/domains/DomainsTab";
+import { MusclesTab } from "@/features/dashboard/components/muscles/MusclesTab";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -47,6 +49,7 @@ export const Route = createFileRoute("/")({
         queryKey: ["muscles"],
         queryFn: () => getMuscles(),
       }),
+      context.queryKey(["live"]),
       context.queryClient.ensureQueryData({
         queryKey: ["live"],
         queryFn: () => getLiveConnections(),
@@ -208,7 +211,20 @@ function Index() {
                     </div>
                   </CardHeader>
                   <CardContent className="p-0">
-                    <MuscleList muscles={muscles} />
+                    <div className="divide-y divide-border/40">
+                      {muscles.map((muscle) => (
+                        <div key={muscle.id} className="p-3 flex items-center justify-between hover:bg-accent/20 transition-colors">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-2 h-2 rounded-full ${muscle.status === 'online' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.4)]' : 'bg-gray-400'}`} />
+                            <div>
+                              <div className="text-xs font-bold">{muscle.name}</div>
+                              <div className="text-[10px] text-muted-foreground font-mono">{muscle.ip}</div>
+                            </div>
+                          </div>
+                          <Badge variant="outline" className="text-[10px] font-bold">{muscle.status === 'online' ? 'Protegido' : 'Off'}</Badge>
+                        </div>
+                      ))}
+                    </div>
                   </CardContent>
                 </Card>
               </div>
@@ -216,16 +232,22 @@ function Index() {
           </TabsContent>
 
           <TabsContent value="xui" className="space-y-8 mt-0 outline-none">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <StatCard label="Linhas no XUI" value={stats.liveConnections} />
+              <StatCard label="Linhas Ativas" value={stats.streamingCount} className="text-green-500" />
+              <StatCard label="Bouquets" value={0} />
+              <StatCard label="Banco XUI" value="ON" className="text-primary" />
+            </div>
             <XuiConnectionConfig />
-            {/* Additional XUI related refined components can be added here */}
+            <XuiOperations muscleCount={muscles.length} />
           </TabsContent>
           
           <TabsContent value="domains" className="space-y-8 mt-0 outline-none">
-            {/* Domínios content refactored */}
+            <DomainsTab />
           </TabsContent>
 
           <TabsContent value="lb" className="space-y-8 mt-0 outline-none">
-            {/* Músculos management content refactored */}
+            <MusclesTab muscles={muscles} />
           </TabsContent>
         </Tabs>
 
