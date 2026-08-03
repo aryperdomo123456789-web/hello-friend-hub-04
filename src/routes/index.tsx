@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { getDashboardStats, getSources, getMuscles } from "@/lib/dashboard.functions";
+import { getDashboardStats, getSources, getMuscles, getLiveConnections, getHostHealth } from "@/lib/dashboard.functions";
 import { getLbInstallerScript, addMuscle } from "@/lib/muscles.functions";
-import { Server, Activity, Database, ShieldCheck, ChevronRight, ArrowUpRight, Moon, Plus, Terminal, Copy, Check, Shield } from "lucide-react";
+import { Server, Activity, Database, ShieldCheck, ChevronRight, ArrowUpRight, Moon, Plus, Terminal, Copy, Check, Shield, Users, Monitor, Play, Film, Tv, Globe, AlertTriangle, Search, RefreshCw, X } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,13 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { toast } from "sonner";
 import { ThemeToggle } from "@/components/theme-toggle";
 
