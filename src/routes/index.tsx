@@ -90,16 +90,25 @@ function Index() {
         </header>
 
         <Tabs defaultValue="live" className="w-full space-y-6">
-          <TabsList className="bg-card/50 border border-border/50 p-1 rounded-xl h-auto">
+          <TabsList className="bg-card/50 border border-border/50 p-1 rounded-xl h-auto flex-wrap justify-start">
             <TabsTrigger value="live" className="gap-2 px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Activity className="w-4 h-4" />
-              Painel Geral
+              Rastreamento ao Vivo
             </TabsTrigger>
             <TabsTrigger value="xui" className="gap-2 px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Monitor className="w-4 h-4" />
               Gerência XUI
             </TabsTrigger>
+            <TabsTrigger value="domains" className="gap-2 px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Globe className="w-4 h-4" />
+              Domínios
+            </TabsTrigger>
+            <TabsTrigger value="lb" className="gap-2 px-4 py-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Server className="w-4 h-4" />
+              Músculos (LB)
+            </TabsTrigger>
           </TabsList>
+
 
           <TabsContent value="live" className="space-y-8 mt-0 outline-none">
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
