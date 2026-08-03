@@ -67,47 +67,77 @@ export const getDashboardStats = createServerFn({ method: "GET" })
 
 export const getSources = createServerFn({ method: "GET" })
   .handler(async () => {
-    const { data } = await supabaseAdmin
-      .from("sources")
-      .select("*")
-      .order("created_at", { ascending: false });
-    return data || [];
+    try {
+      const { data, error } = await supabaseAdmin
+        .from("sources")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data || [];
+    } catch (e) {
+      console.error("getSources error:", e);
+      return [];
+    }
   });
 
 export const getMuscles = createServerFn({ method: "GET" })
   .handler(async () => {
-    const { data } = await supabaseAdmin
-      .from("muscles")
-      .select("*, sources(name)")
-      .order("created_at", { ascending: false });
-    return data || [];
+    try {
+      const { data, error } = await supabaseAdmin
+        .from("muscles")
+        .select("*, sources(name)")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data || [];
+    } catch (e) {
+      console.error("getMuscles error:", e);
+      return [];
+    }
   });
 
 export const getLiveConnections = createServerFn({ method: "GET" })
   .handler(async () => {
-    const { data } = await supabaseAdmin
-      .from("live_connections")
-      .select("*, muscles(id, name)")
-      .order("started_at", { ascending: false });
-    return data || [];
+    try {
+      const { data, error } = await supabaseAdmin
+        .from("live_connections")
+        .select("*, muscles(id, name)")
+        .order("started_at", { ascending: false });
+      if (error) throw error;
+      return data || [];
+    } catch (e) {
+      console.error("getLiveConnections error:", e);
+      return [];
+    }
   });
 
 export const getHostHealth = createServerFn({ method: "GET" })
   .handler(async () => {
-    const { data } = await supabaseAdmin
-      .from("host_health")
-      .select("*")
-      .order("last_seen", { ascending: false });
-    return data || [];
+    try {
+      const { data, error } = await supabaseAdmin
+        .from("host_health")
+        .select("*")
+        .order("last_seen", { ascending: false });
+      if (error) throw error;
+      return data || [];
+    } catch (e) {
+      console.error("getHostHealth error:", e);
+      return [];
+    }
   });
 
 export const getProtectedDomains = createServerFn({ method: "GET" })
   .handler(async () => {
-    const { data } = await supabaseAdmin
-      .from("protected_domains")
-      .select("*")
-      .order("created_at", { ascending: false });
-    return (data as ProtectedDomain[]) || [];
+    try {
+      const { data, error } = await supabaseAdmin
+        .from("protected_domains")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return (data as ProtectedDomain[]) || [];
+    } catch (e) {
+      console.error("getProtectedDomains error:", e);
+      return [];
+    }
   });
 
 export const saveSourceConfig = createServerFn({ method: "POST" })
